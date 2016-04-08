@@ -1,0 +1,18 @@
+<div class="battleframe">
+  <h3>This is the Battle Frame</h3>
+  <button {{action 'rollDice'}}>
+    ROLL ALL THE DICE!
+  </button>
+  <div>
+    {{#each game.player_dice as |die|}}
+      {{battle-dice info=die}}
+    {{/each}}
+  </div>
+</div>
+<div class="battlespellbook">
+  {{spell-school-picker}}
+  This is the spellbook
+</div>
+<div class="battlefooter">
+  {{battle-player-info}}
+</div>

@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   game: Ember.inject.service('game'),
   spellList: Ember.computed('game.chosenSchool', function() {
+    var gameService = this.get('game');
     switch (this.get('game.chosenSchool')) {
       case 'life':
         return [{
@@ -10,7 +11,7 @@ export default Ember.Component.extend({
           cost: {
             life: 1
           },
-          effect: () => {this.get('game').healPlayer(1);}
+          effect: () => {gameService.healPlayer(1);}
         }];
 /*      case 'neutral':
       case 'bard':

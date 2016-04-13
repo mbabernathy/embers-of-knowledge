@@ -1,6 +1,7 @@
-<strong>{{name}}</strong>
+<strong>{{spell.name}}</strong><br/>
 Cost:
-{{#if cost.life}}
-  <div class="life mana-icon"/>{{cost.life}}
+{{#if spell.cost.life}}
+  <div class="life mana-icon"/>{{spell.cost.life}}
 {{/if}}
+<br/>
 <button {{action "castSpell"}}>Cast</button>

@@ -37,6 +37,8 @@ export default Ember.Service.extend({
     death: 0,
   },
 
+  chosenSchool: 'neutral',
+
   addNeutralMana(amount) {
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
   },
@@ -59,6 +61,9 @@ export default Ember.Service.extend({
     }
   },
 
+  healPlayer(amount) {
+    this.set('player_life', this.get('player_life') + amount);
+  },
   rollAllDice() {
     this.get('player_dice').forEach((dice) => {
       var total_sides = dice.neutral_sides + dice.school_sides + dice.crit_sides;

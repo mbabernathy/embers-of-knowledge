@@ -5,20 +5,24 @@
 
 .battleflexbox {
   display: flex;
-  height: 90%;
   flex-flow: row wrap;
 }
 
 .battleframe {
   flex: 2;
+  display: flex;
+  flex-flow: column wrap;
+  border: 1px solid;
+  justify-content: space-between;
 }
 
 .battlespellbook {
   flex: 1;
+  border: 1px solid;
 }
 
 .battlefooter {
-  flex: 1 100%;
+  border: 1px solid;
 }
 
 .spell-picker-container {

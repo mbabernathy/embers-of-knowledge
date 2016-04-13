@@ -1,0 +1,6 @@
+<strong>{{name}}</strong>
+Cost:
+{{#if cost.life}}
+  <div class="life mana-icon"/>{{cost.life}}
+{{/if}}
+<button {{action "castSpell"}}>Cast</button>

@@ -13,6 +13,6 @@
   </div>
 </div>
 <div class="battlespellbook">
-  {{spell-school-picker}}
-  {{battle-spellbook}}
+  {{spell-school-picker chooseSpell=(action "setChosenSchool")}}
+  {{battle-spellbook chosenSchool=chosenSpellSchool}}
 </div>

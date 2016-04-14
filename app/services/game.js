@@ -37,8 +37,6 @@ export default Ember.Service.extend({
     death: 0,
   },
 
-  chosenSchool: 'neutral',
-
   addNeutralMana(amount) {
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
   },

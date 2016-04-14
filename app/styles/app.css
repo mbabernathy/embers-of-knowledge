@@ -43,6 +43,9 @@
   display: table-cell;
   position: absolute;
 }
+.spell-listing {
+  text-align: center;
+}
 
 .dice {
   border-radius: 50%;
@@ -68,6 +71,7 @@
   border-radius: 50%;
 	width: 15px;
 	height: 15px;
+  margin: auto;
 }
 
 .life {

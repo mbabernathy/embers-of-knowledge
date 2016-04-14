@@ -2,9 +2,11 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   game: Ember.inject.service('game'),
-  spellList: Ember.computed('game.chosenSchool', function() {
+  chosenSchool: null,
+  classNames:['spell-listing'],
+  spellList: Ember.computed('chosenSchool', function() {
     var gameService = this.get('game');
-    switch (this.get('game.chosenSchool')) {
+    switch (this.get('chosenSchool')) {
       case 'life':
         return [{
           name: 'Minor Heal',

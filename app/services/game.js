@@ -59,9 +59,15 @@ export default Ember.Service.extend({
     }
   },
 
+  hasEnoughMana(cost){
+    if (cost.life && cost.life > this.get('player_mana.life')) {
+      return false;
+    }
+    return true;
+  },
   preCastChecks(cost) {
     // Make sure they can cast spell
-    if (cost.life && cost.life > this.get('player_mana.life')) {
+    if (!this.hasEnoughMana(cost)) {
       return false;
     }
     // Deduct mana now

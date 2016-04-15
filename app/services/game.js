@@ -59,6 +59,19 @@ export default Ember.Service.extend({
     }
   },
 
+  preCastChecks(cost) {
+    // Make sure they can cast spell
+    if (cost.life && cost.life > this.get('player_mana.life')) {
+      return false;
+    }
+    // Deduct mana now
+    if (cost.life) {
+      this.set('player_mana.life', this.get('player_mana.life') - cost.life);
+    }
+    // Check for counterspell
+    // TODO: Add counterspell logic
+    return true;
+  },
   healPlayer(amount) {
     this.set('player_life', this.get('player_life') + amount);
   },

@@ -8,9 +8,7 @@ export default Ember.Component.extend({
   }),
   actions: {
     castSpell() {
-      if(this.get('game').preCastChecks(this.get('spell.cost'))) {
-        this.get('spell.effect')();
-      }
+      this.get('game').castSpell(this.spell);
     }
   }
 });

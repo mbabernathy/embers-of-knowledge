@@ -1,37 +1,11 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  game: Ember.inject.service('game'),
+  spells: Ember.inject.service('spells'),
   chosenSchool: null,
   classNames:['spell-listing'],
   spellList: Ember.computed('chosenSchool', function() {
-    var gameService = this.get('game');
-    switch (this.get('chosenSchool')) {
-      case 'life':
-        return [{
-          name: 'Minor Heal',
-          cost: {
-            life: 1
-          },
-          effect: () => {gameService.healPlayer(1);}
-        }];
-/*      case 'neutral':
-      case 'bard':
-      case 'illusion':
-      case 'sorcery':*/
-      case 'death':
-        return [{
-          name: 'Minor Hurt',
-          cost: {
-            death: 1
-          },
-          effect: () => {gameService.harmOpponent(1);}
-        }];
-/*      case 'summon':
-      case 'phys':
-      case 'druid':*/
-      default:
-        return [];
-    }
-  })
+    return this.get('spells').getKnownSchoolSpells(this.get('chosenSchool'));
+  }),
+  noKnownSpells: Ember.computed.empty('spellList')
 });

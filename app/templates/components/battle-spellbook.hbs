@@ -2,3 +2,8 @@
 {{#each spellList as |spell|}}
   {{battle-spell spell=spell}}
 {{/each}}
+{{#if noKnownSpells}}
+  <div>
+    You do not know any {{prettifySchool chosenSchool}} spells...
+  </div>
+{{/if}}

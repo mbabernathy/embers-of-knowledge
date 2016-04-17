@@ -84,30 +84,37 @@ export default Ember.Service.extend({
     }
     return true;
   },
-  preCastChecks(cost) {
+  castSpell(spell) {
     // Make sure they can cast spell
-    if (!this.hasEnoughMana(cost)) {
-      return false;
+    if (!this.hasEnoughMana(spell.cost)) {
+      return;
     }
     // Deduct mana now
-    if (cost.life) {
-      this.set('player_mana.life', this.get('player_mana.life') - cost.life);
+    if (spell.cost.life) {
+      this.set('player_mana.life', this.get('player_mana.life') - spell.cost.life);
     }
-    if (cost.death) {
-      this.set('player_mana.death', this.get('player_mana.death') - cost.death);
+    if (spell.cost.death) {
+      this.set('player_mana.death', this.get('player_mana.death') - spell.cost.death);
     }
-    if (cost.phys) {
-      this.set('player_mana.phys', this.get('player_mana.phys') - cost.phys);
+    if (spell.cost.phys) {
+      this.set('player_mana.phys', this.get('player_mana.phys') - spell.cost.phys);
     }
-    if (cost.illusion) {
-      this.set('player_mana.illusion', this.get('player_mana.illusion') - cost.illusion);
+    if (spell.cost.illusion) {
+      this.set('player_mana.illusion', this.get('player_mana.illusion') - spell.cost.illusion);
     }
-    if (cost.neutral) {
-      this.set('player_mana.neutral', this.get('player_mana.neutral') - cost.neutral);
+    if (spell.cost.neutral) {
+      this.set('player_mana.neutral', this.get('player_mana.neutral') - spell.cost.neutral);
     }
     // Check for counterspell
     // TODO: Add counterspell logic
-    return true;
+
+    // Cast spell effects
+    if (spell.effects.healPlayer) {
+      this.healPlayer(spell.effects.healPlayer);
+    }
+    if (spell.effects.harmOpponent) {
+      this.harmOpponent(spell.effects.harmOpponent);
+    }
   },
   healPlayer(amount) {
     this.set('player_life', this.get('player_life') + amount);

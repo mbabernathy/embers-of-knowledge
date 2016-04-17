@@ -4,6 +4,18 @@ Cost:
 {{#if spell.cost.life}}
   <div class="life mana-icon"/>{{spell.cost.life}}
 {{/if}}
+{{#if spell.cost.death}}
+  <div class="death mana-icon"/>{{spell.cost.death}}
+{{/if}}
+{{#if spell.cost.phys}}
+  <div class="phys mana-icon"/>{{spell.cost.phys}}
+{{/if}}
+{{#if spell.cost.illusion}}
+  <div class="illusion mana-icon"/>{{spell.cost.illusion}}
+{{/if}}
+{{#if spell.cost.neutral}}
+  <div class="neutral mana-icon"/>{{spell.cost.neutral}}
+{{/if}}
 </div>
 <br/>
 <button {{action "castSpell"}} disabled={{cantCast}}>Cast</button>

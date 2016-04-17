@@ -36,7 +36,14 @@ export default Ember.Service.extend({
     illusion: 0,
     death: 0,
   },
-
+  opponent_life: 5,
+  opponent_mana: {
+    neutral: '?',
+    life: '?',
+    phys: '?',
+    illusion: '?',
+    death: '?',
+  },
   addNeutralMana(amount) {
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
   },
@@ -63,6 +70,18 @@ export default Ember.Service.extend({
     if (cost.life && cost.life > this.get('player_mana.life')) {
       return false;
     }
+    if (cost.death && cost.death > this.get('player_mana.death')) {
+      return false;
+    }
+    if (cost.phys && cost.phys > this.get('player_mana.phys')) {
+      return false;
+    }
+    if (cost.illusion && cost.illusion > this.get('player_mana.illusion')) {
+      return false;
+    }
+    if (cost.neutral && cost.neutral > this.get('player_mana.neutral')) {
+      return false;
+    }
     return true;
   },
   preCastChecks(cost) {
@@ -74,12 +93,28 @@ export default Ember.Service.extend({
     if (cost.life) {
       this.set('player_mana.life', this.get('player_mana.life') - cost.life);
     }
+    if (cost.death) {
+      this.set('player_mana.death', this.get('player_mana.death') - cost.death);
+    }
+    if (cost.phys) {
+      this.set('player_mana.phys', this.get('player_mana.phys') - cost.phys);
+    }
+    if (cost.illusion) {
+      this.set('player_mana.illusion', this.get('player_mana.illusion') - cost.illusion);
+    }
+    if (cost.neutral) {
+      this.set('player_mana.neutral', this.get('player_mana.neutral') - cost.neutral);
+    }
     // Check for counterspell
     // TODO: Add counterspell logic
     return true;
   },
   healPlayer(amount) {
     this.set('player_life', this.get('player_life') + amount);
+  },
+  harmOpponent(amount) {
+    this.set('opponent_life', this.get('opponent_life') - amount);
+    // TODO trigger end match
   },
   rollAllDice() {
     this.get('player_dice').forEach((dice) => {
@@ -92,6 +127,18 @@ export default Ember.Service.extend({
         console.log('Mana earned: '+ dice.dice_school + ' dice added ' + roll + ' neutral mana');
       } else if (roll > total_sides - dice.crit_sides) {
         // critical roll scored
+        switch (dice.dice_school) {
+          case 'life':
+            this.healPlayer(2);
+            break;
+          case 'death':
+            this.harmOpponent(2);
+            break;
+/*          case 'phys':
+          case 'illusion':*/
+          default:
+
+        }
         console.log('CRIT! earned: '+ dice.dice_school + ' created critical effect!');
       } else {
         // give school mana

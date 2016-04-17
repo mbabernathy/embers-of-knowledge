@@ -1,15 +1,13 @@
 <div class="battleframe">
   <h3>This is the Battle Frame</h3>
+  <div>
+    {{battle-player-info player="Rival" health=game.opponent_life mana=game.opponent_mana}}
+  </div>
   <button {{action 'rollDice'}}>
     ROLL ALL THE DICE!
   </button>
-  <div>
-    {{#each game.player_dice as |die|}}
-      {{battle-dice info=die}}
-    {{/each}}
-  </div>
   <div class="battlefooter">
-    {{battle-player-info}}
+    {{battle-player-info player="Your" health=game.player_life mana=game.player_mana}}
   </div>
 </div>
 <div class="battlespellbook">

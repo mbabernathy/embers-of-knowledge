@@ -18,9 +18,16 @@ export default Ember.Component.extend({
 /*      case 'neutral':
       case 'bard':
       case 'illusion':
-      case 'sorcery':
+      case 'sorcery':*/
       case 'death':
-      case 'summon':
+        return [{
+          name: 'Minor Hurt',
+          cost: {
+            death: 1
+          },
+          effect: () => {gameService.harmOpponent(1);}
+        }];
+/*      case 'summon':
       case 'phys':
       case 'druid':*/
       default:

@@ -34,8 +34,8 @@
 
 .spell-picker-container button {
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 5em;
+  height: 5em;
   top: 50%;
   left: 50%;
   text-align: center;
@@ -58,8 +58,8 @@
 
 .player-health {
   border-radius: 50%;
-	width: 50px;
-	height: 50px;
+	width: 4em;
+	height: 4em;
   text-align: center;
   vertical-align: middle;
   display: table-cell;
@@ -69,8 +69,8 @@
 
 .mana-icon {
   border-radius: 50%;
-	width: 15px;
-	height: 15px;
+	width: 1em;
+	height: 1em;
   margin: auto;
 }
 

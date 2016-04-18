@@ -36,6 +36,7 @@ export default Ember.Service.extend({
     illusion: 0,
     death: 0,
   },
+  player_creatures: [],
   opponent_life: 5,
   opponent_mana: {
     neutral: '?',
@@ -44,6 +45,7 @@ export default Ember.Service.extend({
     illusion: '?',
     death: '?',
   },
+  opponent_creatures: [],
   addNeutralMana(amount) {
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
   },
@@ -115,6 +117,9 @@ export default Ember.Service.extend({
     if (spell.effects.harmOpponent) {
       this.harmOpponent(spell.effects.harmOpponent);
     }
+    if (spell.effects.addCreature){
+      this.addCreatureAlly(spell.effects.addCreature);
+    }
   },
   healPlayer(amount) {
     this.set('player_life', this.get('player_life') + amount);
@@ -122,6 +127,9 @@ export default Ember.Service.extend({
   harmOpponent(amount) {
     this.set('opponent_life', this.get('opponent_life') - amount);
     // TODO trigger end match
+  },
+  addCreatureAlly(strength) {
+    this.get('player_creatures').pushObject(strength);
   },
   rollAllDice() {
     this.get('player_dice').forEach((dice) => {
@@ -141,8 +149,12 @@ export default Ember.Service.extend({
           case 'death':
             this.harmOpponent(2);
             break;
-/*          case 'phys':
-          case 'illusion':*/
+          case 'phys':
+            // Add two 1 strength creatures
+            this.addCreatureAlly(1);
+            this.addCreatureAlly(1);
+            break;
+/*          case 'illusion':*/
           default:
 
         }

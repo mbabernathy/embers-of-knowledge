@@ -3,9 +3,15 @@
   <div>
     {{battle-player-info player="Rival" health=game.opponent_life mana=game.opponent_mana}}
   </div>
+  <div>
+    {{battle-player-creatures creatures=game.opponent_creatures}}
+  </div>
   <button {{action 'rollDice'}}>
     ROLL ALL THE DICE!
   </button>
+  <div>
+    {{battle-player-creatures creatures=game.player_creatures}}
+  </div>
   <div class="battlefooter">
     {{battle-player-info player="Your" health=game.player_life mana=game.player_mana}}
   </div>

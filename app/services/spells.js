@@ -23,7 +23,15 @@ export default Ember.Service.extend({
     }
   }],
   summon_spells: [],
-  phys_spells: [],
+  phys_spells: [{
+    name: 'Create Mini-Golem',
+    cost: {
+      phys: 1
+    },
+    effects: {
+      addCreature: 1
+    }
+  }],
   druid_spells: [],
   neutral_spells: [],
 

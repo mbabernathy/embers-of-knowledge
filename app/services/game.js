@@ -117,7 +117,9 @@ export default Ember.Service.extend({
     if (spell.effects.harmOpponent) {
       this.harmOpponent(spell.effects.harmOpponent);
     }
-    if (spell.effects.addCreature){
+    // The undefined check is needed here since adding
+    // a creature of strength 0 is valid, but fails the normal if check
+    if (typeof spell.effects.addCreature !== 'undefined') {
       this.addCreatureAlly(spell.effects.addCreature);
     }
   },

@@ -11,7 +11,15 @@ export default Ember.Service.extend({
     }
   }],
   bard_spells: [],
-  illusion_spells: [],
+  illusion_spells: [{
+    name: 'Create Phantom',
+    cost: {
+      illusion: 1
+    },
+    effects: {
+      addCreature: 0
+    }
+  }],
   sorcery_spells: [],
   death_spells: [{
     name: 'Minor Hurt',

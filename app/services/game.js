@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { prettifySchool } from 'embers-of-knowledge/helpers/prettify-school';
 
 export default Ember.Service.extend({
   player_dice: [
@@ -46,6 +47,9 @@ export default Ember.Service.extend({
     death: '?',
   },
   opponent_creatures: [],
+
+  diceMessages: [],
+
   addNeutralMana(amount) {
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
   },
@@ -135,36 +139,38 @@ export default Ember.Service.extend({
   },
   rollAllDice() {
     this.get('player_dice').forEach((dice) => {
+      var schoolName = prettifySchool([dice.dice_school]);
       var total_sides = dice.neutral_sides + dice.school_sides + dice.crit_sides;
       var roll = Math.ceil(Math.random() * total_sides);
-      console.log('Roll for ' + dice.dice_school + ' dice was ' + roll);
+      console.log('Roll for ' + schoolName + ' dice was ' + roll);
       if (roll <= dice.neutral_sides) {
         // give neutral mana
         this.addNeutralMana(roll);
-        console.log('Mana earned: '+ dice.dice_school + ' dice added ' + roll + ' neutral mana');
+        this.get('diceMessages').pushObject((schoolName + ' dice added ' + roll + ' Neutral mana'));
       } else if (roll > total_sides - dice.crit_sides) {
         // critical roll scored
         switch (dice.dice_school) {
           case 'life':
             this.healPlayer(2);
+            this.get('diceMessages').pushObject((schoolName + ' dice crit! You gained 2 health!'));
             break;
           case 'death':
             this.harmOpponent(2);
+            this.get('diceMessages').pushObject((schoolName + ' dice crit! Opponent lost 2 health!'));
             break;
           case 'phys':
             // Add two 1 strength creatures
             this.addCreatureAlly(1);
             this.addCreatureAlly(1);
+            this.get('diceMessages').pushObject((schoolName + ' dice crit! You gained 2 creatures of strength 1!'));
             break;
 /*          case 'illusion':*/
           default:
-
         }
-        console.log('CRIT! earned: '+ dice.dice_school + ' created critical effect!');
       } else {
         // give school mana
         this.addSchoolMana(dice.dice_school, roll - dice.neutral_sides);
-        console.log('Mana earned: '+ dice.dice_school + ' dice added ' + (roll - dice.neutral_sides) + ' '+ dice.dice_school +' mana');
+        this.get('diceMessages').pushObject((schoolName + ' dice added ' + (roll - dice.neutral_sides) + ' '+ schoolName +' mana'));
       }
     });
   }

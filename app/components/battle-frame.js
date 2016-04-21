@@ -6,6 +6,7 @@ export default Ember.Component.extend({
   game: Ember.inject.service('game'),
   chosenSpellSchool: 'neutral',
 
+  showDiceInfoModal: Ember.computed.notEmpty('game.diceMessages'),
   actions: {
     rollDice() {
       this.get('game').rollAllDice();

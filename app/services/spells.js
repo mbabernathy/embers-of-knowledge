@@ -12,12 +12,12 @@ export default Ember.Service.extend({
   }],
   bard_spells: [],
   illusion_spells: [{
-    name: 'Create Phantom',
+    name: 'Make love not war',
     cost: {
       illusion: 1
     },
     effects: {
-      addCreature: 0
+      desert: 1
     }
   }],
   sorcery_spells: [],
@@ -41,7 +41,15 @@ export default Ember.Service.extend({
     }
   }],
   druid_spells: [],
-  neutral_spells: [],
+  neutral_spells: [{
+    name: 'Create Decoy',
+    cost: {
+      neutral: 2
+    },
+    effects: {
+      addCreature: 0
+    }
+  }],
 
   getKnownSchoolSpells(school) {
     switch (school) {

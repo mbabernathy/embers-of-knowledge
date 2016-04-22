@@ -46,7 +46,7 @@ export default Ember.Service.extend({
     illusion: '?',
     death: '?',
   },
-  opponent_creatures: [],
+  opponent_creatures: [2,1,1,0],
 
   diceMessages: [],
 
@@ -126,6 +126,9 @@ export default Ember.Service.extend({
     if (typeof spell.effects.addCreature !== 'undefined') {
       this.addCreatureAlly(spell.effects.addCreature);
     }
+    if (spell.effects.desert) {
+      this.creatureDesert(spell.effects.desert);
+    }
   },
   healPlayer(amount) {
     this.set('player_life', this.get('player_life') + amount);
@@ -136,6 +139,19 @@ export default Ember.Service.extend({
   },
   addCreatureAlly(strength) {
     this.get('player_creatures').pushObject(strength);
+  },
+  creatureDesert(target) {
+    if (target === 0) {
+      return;
+    }
+    var index = this.get('opponent_creatures').indexOf(target);
+    if (index !== -1) {
+      this.get('opponent_creatures').removeAt(index);
+      this.get('opponent_creatures').pushObject(0);
+    }
+    else { // no creatures of that strength exist, try one lower
+      this.creatureDesert(target - 1);
+    }
   },
   rollAllDice() {
     this.get('player_dice').forEach((dice) => {

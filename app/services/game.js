@@ -139,6 +139,7 @@ export default Ember.Service.extend({
   },
   addCreatureAlly(strength) {
     this.get('player_creatures').pushObject(strength);
+    this.set('player_creatures', this.get('player_creatures').sort((a,b)=>{return b-a;}));
   },
   creatureDesert(target) {
     if (target === 0) {
@@ -148,6 +149,7 @@ export default Ember.Service.extend({
     if (index !== -1) {
       this.get('opponent_creatures').removeAt(index);
       this.get('opponent_creatures').pushObject(0);
+      this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return a-b;}));
     }
     else { // no creatures of that strength exist, try one lower
       this.creatureDesert(target - 1);

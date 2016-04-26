@@ -13,6 +13,9 @@ export default Ember.Component.extend({
     },
     setChosenSchool(chosenSchool) {
       this.set('chosenSpellSchool', chosenSchool);
+    },
+    doBattle() {
+      this.get('game').resolveCombat();
     }
   }
 });

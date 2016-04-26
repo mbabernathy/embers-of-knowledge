@@ -137,6 +137,9 @@ export default Ember.Service.extend({
     this.set('opponent_life', this.get('opponent_life') - amount);
     // TODO trigger end match
   },
+  harmPlayer(amount) {
+    this.set('player_life', this.get('player_life') - amount);
+  },
   addCreatureAlly(strength) {
     this.get('player_creatures').pushObject(strength);
     this.set('player_creatures', this.get('player_creatures').sort((a,b)=>{return b-a;}));
@@ -149,7 +152,7 @@ export default Ember.Service.extend({
     if (index !== -1) {
       this.get('opponent_creatures').removeAt(index);
       this.get('opponent_creatures').pushObject(0);
-      this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return a-b;}));
+      this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return b-a;}));
     }
     else { // no creatures of that strength exist, try one lower
       this.creatureDesert(target - 1);
@@ -191,6 +194,62 @@ export default Ember.Service.extend({
         this.get('diceMessages').pushObject((schoolName + ' dice added ' + (roll - dice.neutral_sides) + ' '+ schoolName +' mana'));
       }
     });
+  },
+  resolveCombat() {
+    // TODO trigger precombat stuff
+
+    // First, find out who has more creatures;
+    var playerHasMoreCreatures = (this.get('player_creatures').length >= this.get('opponent_creatures').length);
+
+    // Sort creatures such that larger arrray desc; smaller ascend
+    var largerCreatureList;
+    var smallerCreatureList;
+    if (playerHasMoreCreatures) {
+      largerCreatureList = this.get('player_creatures');
+      smallerCreatureList = this.get('opponent_creatures');
+    } else {
+      largerCreatureList = this.get('opponent_creatures');
+      smallerCreatureList = this.get('player_creatures');
+    }
+    largerCreatureList.sort((a,b)=>{return b-a;});
+    smallerCreatureList.sort((a,b)=>{return a-b;});
+    console.log('COMBAT: '+ largerCreatureList + " vs " + smallerCreatureList);
+
+    // Face off the creaters in index order; kill loser & ties
+    for (var i=0; i<smallerCreatureList.length; i++) {
+      if (smallerCreatureList[i] > largerCreatureList[i]) {
+        largerCreatureList[i] = 0;
+      } else if (smallerCreatureList[i] < largerCreatureList[i]) {
+        smallerCreatureList[i] = 0;
+      } else {
+        largerCreatureList[i] = 0;
+        smallerCreatureList[i] = 0;
+      }
+    }
+
+    // Deal damage to player with least creatures from unblocked
+    var damage = 0;
+    for (var j=smallerCreatureList.length; j<largerCreatureList.length; j++) {
+      damage += largerCreatureList[j];
+    }
+    if(playerHasMoreCreatures) {
+      this.harmOpponent(damage);
+      console.log('COMBAT: unblocked creatures deal '+damage+' to rival');
+      this.set('player_creatures', largerCreatureList);
+      this.set('opponent_creatures', smallerCreatureList);
+    } else {
+      this.harmPlayer(damage);
+      console.log('COMBAT: unblocked creatures deal '+damage+' to you');
+      this.set('opponent_creatures', largerCreatureList);
+      this.set('player_creatures', smallerCreatureList);
+    }
+
+    // Remove dead creatures & sort
+    this.set('player_creatures', this.get('player_creatures').sort((a,b)=>{return b-a;}));
+    this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return b-a;}));
+
+    this.get('player_creatures').removeObject(0);
+    this.get('opponent_creatures').removeObject(0);
   }
 
 });

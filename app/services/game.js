@@ -46,9 +46,10 @@ export default Ember.Service.extend({
     illusion: '?',
     death: '?',
   },
-  opponent_creatures: [2,1,1,0],
+  opponent_creatures: [],
 
   diceMessages: [],
+  combatMessages: [],
 
   addNeutralMana(amount) {
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
@@ -144,6 +145,10 @@ export default Ember.Service.extend({
     this.get('player_creatures').pushObject(strength);
     this.set('player_creatures', this.get('player_creatures').sort((a,b)=>{return b-a;}));
   },
+  addCreatureRival(strength) {
+    this.get('opponent_creatures').pushObject(strength);
+    this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return b-a;}));
+  },
   creatureDesert(target) {
     if (target === 0) {
       return;
@@ -215,18 +220,25 @@ export default Ember.Service.extend({
     smallerCreatureList.sort((a,b)=>{return a-b;});
     console.log('COMBAT: '+ largerCreatureList + " vs " + smallerCreatureList);
 
+    var defeatedCreatures = 0;
     // Face off the creaters in index order; kill loser & ties
     for (var i=0; i<smallerCreatureList.length; i++) {
       if (smallerCreatureList[i] > largerCreatureList[i]) {
         largerCreatureList[i] = 0;
+        defeatedCreatures++;
       } else if (smallerCreatureList[i] < largerCreatureList[i]) {
         smallerCreatureList[i] = 0;
+        defeatedCreatures++;
       } else {
         largerCreatureList[i] = 0;
         smallerCreatureList[i] = 0;
+        defeatedCreatures += 2;
       }
     }
 
+    if (defeatedCreatures > 0) {
+      this.get('combatMessages').pushObject((defeatedCreatures + ' creatures perished in combat'));
+    }
     // Deal damage to player with least creatures from unblocked
     var damage = 0;
     for (var j=smallerCreatureList.length; j<largerCreatureList.length; j++) {
@@ -234,12 +246,16 @@ export default Ember.Service.extend({
     }
     if(playerHasMoreCreatures) {
       this.harmOpponent(damage);
-      console.log('COMBAT: unblocked creatures deal '+damage+' to rival');
+      if (damage > 0) {
+        this.get('combatMessages').pushObject(('Your creatures dealt '+ damage +' damage to your opponent'));
+      }
       this.set('player_creatures', largerCreatureList);
       this.set('opponent_creatures', smallerCreatureList);
     } else {
       this.harmPlayer(damage);
-      console.log('COMBAT: unblocked creatures deal '+damage+' to you');
+      if (damage > 0) {
+        this.get('combatMessages').pushObject(('Your rival\'s creatures dealt '+ damage +' damage to you'));
+      }
       this.set('opponent_creatures', largerCreatureList);
       this.set('player_creatures', smallerCreatureList);
     }

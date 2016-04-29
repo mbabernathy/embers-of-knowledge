@@ -7,6 +7,7 @@ export default Ember.Component.extend({
   chosenSpellSchool: 'neutral',
 
   showDiceInfoModal: Ember.computed.notEmpty('game.diceMessages'),
+  showCombatRecapModal: Ember.computed.notEmpty('game.combatMessages'),
   actions: {
     rollDice() {
       this.get('game').rollAllDice();

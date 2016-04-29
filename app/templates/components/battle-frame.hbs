@@ -1,6 +1,9 @@
 {{#if showDiceInfoModal}}
   {{diceroll-info-popover diceMessages=game.diceMessages}}
 {{/if}}
+{{#if showCombatRecapModal}}
+  {{combat-info-popover combatMessages=game.combatMessages}}
+{{/if}}
 <div class="battleframe">
   <h3>This is the Battle Frame</h3>
   <div>

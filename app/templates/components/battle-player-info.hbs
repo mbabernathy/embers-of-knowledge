@@ -25,3 +25,8 @@
   <div class="mana-icon death"/>
   {{mana.death}}
 </div>
+{{#if playerInfo}}
+<div style="margin:15px">
+  <button class="btn {{doneButtonClass}}" {{action "finishCastPhase"}}>Done Casting</button>
+</div>
+{{/if}}

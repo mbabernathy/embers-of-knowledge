@@ -2,6 +2,7 @@ import Ember from 'ember';
 import { prettifySchool } from 'embers-of-knowledge/helpers/prettify-school';
 
 export default Ember.Service.extend({
+  max_life: 5,
   player_dice: [
     {
       dice_school : 'life',
@@ -48,8 +49,11 @@ export default Ember.Service.extend({
   },
   opponent_creatures: [],
 
+  startingNewTurn: true,
+  turn: 1,
   diceMessages: [],
   combatMessages: [],
+  manaRemainingWarning: false,
 
   addNeutralMana(amount) {
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
@@ -266,6 +270,30 @@ export default Ember.Service.extend({
 
     this.get('player_creatures').removeObject(0);
     this.get('opponent_creatures').removeObject(0);
+
+    if (this.get('combatMessages').length === 0) {
+      this.get('combatMessages').pushObject('Nothing interesting happed...');
+    }
+  },
+  endTurn() {
+    // Clean out any unspent mana
+    this.set('player_mana.life', 0);
+    this.set('player_mana.phys', 0);
+    this.set('player_mana.illusion', 0);
+    this.set('player_mana.death', 0);
+    if (this.get('player_mana.neutral') > this.get('max_life')) {
+      this.set('player_mana.neutral', this.get('max_life'));
+    }
+
+    // Deal with overheal
+    if (this.get('player_life') > this.get('max_life')) {
+      var hpDiff = this.get('player_life') - this.get('max_life');
+      this.set('player_life', this.get('player_life') - Math.ceil(0.25 * hpDiff));
+    }
+
+    // Trigger new turn
+    this.set('turn', this.get('turn') + 1);
+    this.set('startingNewTurn', true);
   }
 
 });

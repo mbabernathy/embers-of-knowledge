@@ -6,6 +6,7 @@ export default Ember.Component.extend({
   actions: {
     clearCombatInfo() {
       this.get('game.combatMessages').clear();
+      this.get('game').endTurn();
     }
   }
 });

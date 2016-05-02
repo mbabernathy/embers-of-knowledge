@@ -1,5 +1,7 @@
 {{#if showNewTurn}}
-  {{#bs-modal closeAction="rollDice" title=beginningTurnText backdrop=false}}
+  {{#bs-modal closeAction="rollDice" title="Turn Starting" backdrop=false}}
+    <p>Stats so far:</p>
+    {{battle-stats}}
   {{/bs-modal}}
 {{/if}}
 {{#if showDiceInfoModal}}

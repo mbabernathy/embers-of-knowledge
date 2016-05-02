@@ -2,6 +2,7 @@ import Ember from 'ember';
 import { prettifySchool } from 'embers-of-knowledge/helpers/prettify-school';
 
 export default Ember.Service.extend({
+  stats: Ember.inject.service('stats'),
   max_life: 5,
   player_dice: [
     {
@@ -50,15 +51,16 @@ export default Ember.Service.extend({
   opponent_creatures: [],
 
   startingNewTurn: true,
-  turn: 1,
   diceMessages: [],
   combatMessages: [],
   manaRemainingWarning: false,
 
   addNeutralMana(amount) {
+    this.get('stats').trackManaGained(amount);
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
   },
   addSchoolMana(school, amount) {
+    this.get('stats').trackManaGained(amount);
     switch (school) {
       case 'life':
         this.set('player_mana.life', this.get('player_mana.life') + amount);
@@ -116,6 +118,8 @@ export default Ember.Service.extend({
     if (spell.cost.neutral) {
       this.set('player_mana.neutral', this.get('player_mana.neutral') - spell.cost.neutral);
     }
+    this.get('stats').trackSpellCast(spell.cost);
+
     // Check for counterspell
     // TODO: Add counterspell logic
 
@@ -136,20 +140,25 @@ export default Ember.Service.extend({
     }
   },
   healPlayer(amount) {
+    this.get('stats').trackHealing(amount);
     this.set('player_life', this.get('player_life') + amount);
   },
   harmOpponent(amount) {
+    this.get('stats').trackDamage(amount);
     this.set('opponent_life', this.get('opponent_life') - amount);
     // TODO trigger end match
   },
   harmPlayer(amount) {
+    this.get('stats').trackDamage(amount);
     this.set('player_life', this.get('player_life') - amount);
   },
   addCreatureAlly(strength) {
+    this.get('stats').trackCreatureSummoned();
     this.get('player_creatures').pushObject(strength);
     this.set('player_creatures', this.get('player_creatures').sort((a,b)=>{return b-a;}));
   },
   addCreatureRival(strength) {
+    this.get('stats').trackCreatureSummoned();
     this.get('opponent_creatures').pushObject(strength);
     this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return b-a;}));
   },
@@ -241,6 +250,7 @@ export default Ember.Service.extend({
     }
 
     if (defeatedCreatures > 0) {
+      this.get('stats').trackCreaturesKilled(defeatedCreatures);
       this.get('combatMessages').pushObject((defeatedCreatures + ' creatures perished in combat'));
     }
     // Deal damage to player with least creatures from unblocked
@@ -292,7 +302,7 @@ export default Ember.Service.extend({
     }
 
     // Trigger new turn
-    this.set('turn', this.get('turn') + 1);
+    this.get('stats').incrementTurn();
     this.set('startingNewTurn', true);
   }
 

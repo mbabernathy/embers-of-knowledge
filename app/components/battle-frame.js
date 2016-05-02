@@ -5,9 +5,6 @@ export default Ember.Component.extend({
   classNames: ['battleflexbox'],
   game: Ember.inject.service('game'),
   chosenSpellSchool: 'neutral',
-  beginningTurnText: Ember.computed('game.turn', function() {
-    return 'Beginning Turn ' + this.get('game.turn');
-  }),
 
   showNewTurn: Ember.computed.bool('game.startingNewTurn'),
   showDiceInfoModal: Ember.computed.notEmpty('game.diceMessages'),

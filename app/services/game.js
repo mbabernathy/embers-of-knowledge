@@ -39,6 +39,7 @@ export default Ember.Service.extend({
     illusion: 0,
     death: 0,
   },
+  player_counterspell_tokens: 0,
   player_creatures: [],
   opponent_life: 5,
   opponent_mana: {
@@ -48,6 +49,7 @@ export default Ember.Service.extend({
     illusion: '?',
     death: '?',
   },
+  opponent_counterspell_tokens: 0,
   opponent_creatures: [],
 
   startingNewTurn: true,
@@ -121,7 +123,11 @@ export default Ember.Service.extend({
     this.get('stats').trackSpellCast(spell.cost);
 
     // Check for counterspell
-    // TODO: Add counterspell logic
+    if (this.get('opponent_counterspell_tokens') >= 1) {
+      this.set('opponent_counterspell_tokens', this.get('opponent_counterspell_tokens') - 1);
+      // TODO: Do something to inform player their spell was countered?
+      return;
+    }
 
     // Cast spell effects
     if (spell.effects.healPlayer) {
@@ -203,7 +209,10 @@ export default Ember.Service.extend({
             this.addCreatureAlly(1);
             this.get('diceMessages').pushObject((schoolName + ' dice crit! You gained 2 creatures of strength 1!'));
             break;
-/*          case 'illusion':*/
+          case 'illusion':
+            this.set('player_counterspell_tokens', this.get('player_counterspell_tokens') + 1);
+            this.get('diceMessages').pushObject((schoolName + ' dice crit! You gained a counterspell token!'));
+            break;
           default:
         }
       } else {
@@ -215,6 +224,13 @@ export default Ember.Service.extend({
   },
   resolveCombat() {
     // TODO trigger precombat stuff
+    // Convert all remaining counterspell tokens into strenght 0 creatures
+    if (this.get('player_counterspell_tokens') > 0) {
+      this.get('player_creatures').pushObjects(Array(this.get('player_counterspell_tokens')).fill(0));
+    }
+    if (this.get('opponent_counterspell_tokens') > 0) {
+      this.get('opponent_creatures').pushObjects(Array(this.get('opponent_counterspell_tokens')).fill(0));
+    }
 
     // First, find out who has more creatures;
     var playerHasMoreCreatures = (this.get('player_creatures').length >= this.get('opponent_creatures').length);

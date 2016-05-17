@@ -3,6 +3,7 @@ import { prettifySchool } from 'embers-of-knowledge/helpers/prettify-school';
 
 export default Ember.Service.extend({
   stats: Ember.inject.service('stats'),
+  player: Ember.inject.service('player'),
   max_life: 5,
   player_dice: [
     {
@@ -57,6 +58,25 @@ export default Ember.Service.extend({
   combatMessages: [],
   manaRemainingWarning: false,
 
+  createNewBattle() {
+    this.get('opponent_creatures').clear();
+    this.get('player_creatures').clear();
+    this.set('player_life', this.get('max_life'));
+    this.set('opponent_life', this.get('max_life'));
+
+    this.get('diceMessages').clear();
+    this.get('combatMessages').clear();
+    this.set('startingNewTurn', true);
+    this.set('manaRemainingWarning', false);
+
+    this.set('player_mana.neutral', 0);
+    this.set('player_mana.life', 0);
+    this.set('player_mana.phys', 0);
+    this.set('player_mana.illusion', 0);
+    this.set('player_mana.death', 0);
+
+    this.get('stats').resetCombatStats();
+  },
   addNeutralMana(amount) {
     this.get('stats').trackManaGained(amount);
     this.set('player_mana.neutral', this.get('player_mana.neutral') + amount);
@@ -152,11 +172,16 @@ export default Ember.Service.extend({
   harmOpponent(amount) {
     this.get('stats').trackDamage(amount);
     this.set('opponent_life', this.get('opponent_life') - amount);
-    // TODO trigger end match
+    if (this.get('opponent_life') < 0) {
+      this.get('player').endBattlePhase();
+    }
   },
   harmPlayer(amount) {
     this.get('stats').trackDamage(amount);
     this.set('player_life', this.get('player_life') - amount);
+    if (this.get('player_life') < 0) {
+      this.get('player').endBattlePhase();
+    }
   },
   addCreatureAlly(strength) {
     this.get('stats').trackCreatureSummoned();

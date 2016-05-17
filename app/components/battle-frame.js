@@ -4,8 +4,10 @@ export default Ember.Component.extend({
 
   classNames: ['battleflexbox'],
   game: Ember.inject.service('game'),
+  player: Ember.inject.service('player'),
   chosenSpellSchool: 'neutral',
 
+  doingBattle: Ember.computed.bool('player.isBattling'),
   showNewTurn: Ember.computed.bool('game.startingNewTurn'),
   showDiceInfoModal: Ember.computed.notEmpty('game.diceMessages'),
   showCombatRecapModal: Ember.computed.notEmpty('game.combatMessages'),

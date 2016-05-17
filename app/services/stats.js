@@ -47,5 +47,15 @@ export default Ember.Service.extend({
     }
     this.set('roundSpells', this.get('roundSpells') + 1);
     this.set('roundManaSpent', this.get('roundManaSpent') + totalCost);
+  },
+  resetCombatStats() {
+    this.set('roundTurns', 1);
+    this.set('roundDamage', 0);
+    this.set('roundHealed', 0);
+    this.set('roundSummons', 0);
+    this.set('roundKills', 0);
+    this.set('roundSpells', 0);
+    this.set('roundManaGained', 0);
+    this.set('roundManaSpent', 0);
   }
 });

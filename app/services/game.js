@@ -1,7 +1,7 @@
 import Ember from 'ember';
-import { prettifySchool } from 'embers-of-knowledge/helpers/prettify-school';
 
 export default Ember.Service.extend({
+  info: Ember.inject.service('info'),
   stats: Ember.inject.service('stats'),
   player: Ember.inject.service('player'),
   max_life: 5,
@@ -53,21 +53,11 @@ export default Ember.Service.extend({
   opponent_counterspell_tokens: 0,
   opponent_creatures: [],
 
-  startingNewTurn: true,
-  diceMessages: [],
-  combatMessages: [],
-  manaRemainingWarning: false,
-
   createNewBattle() {
     this.get('opponent_creatures').clear();
     this.get('player_creatures').clear();
     this.set('player_life', this.get('max_life'));
     this.set('opponent_life', this.get('max_life'));
-
-    this.get('diceMessages').clear();
-    this.get('combatMessages').clear();
-    this.set('startingNewTurn', true);
-    this.set('manaRemainingWarning', false);
 
     this.set('player_mana.neutral', 0);
     this.set('player_mana.life', 0);
@@ -76,6 +66,7 @@ export default Ember.Service.extend({
     this.set('player_mana.death', 0);
 
     this.get('stats').resetCombatStats();
+    this.get('info').resetInfoForBattle();
   },
   addNeutralMana(amount) {
     this.get('stats').trackManaGained(amount);
@@ -172,14 +163,14 @@ export default Ember.Service.extend({
   harmOpponent(amount) {
     this.get('stats').trackDamage(amount);
     this.set('opponent_life', this.get('opponent_life') - amount);
-    if (this.get('opponent_life') < 0) {
+    if (this.get('opponent_life') <= 0) {
       this.get('player').endBattlePhase();
     }
   },
   harmPlayer(amount) {
     this.get('stats').trackDamage(amount);
     this.set('player_life', this.get('player_life') - amount);
-    if (this.get('player_life') < 0) {
+    if (this.get('player_life') <= 0) {
       this.get('player').endBattlePhase();
     }
   },
@@ -209,41 +200,37 @@ export default Ember.Service.extend({
   },
   rollAllDice() {
     this.get('player_dice').forEach((dice) => {
-      var schoolName = prettifySchool([dice.dice_school]);
       var total_sides = dice.neutral_sides + dice.school_sides + dice.crit_sides;
       var roll = Math.ceil(Math.random() * total_sides);
-      console.log('Roll for ' + schoolName + ' dice was ' + roll);
       if (roll <= dice.neutral_sides) {
         // give neutral mana
         this.addNeutralMana(roll);
-        this.get('diceMessages').pushObject((schoolName + ' dice added ' + roll + ' Neutral mana'));
+        this.get('info').addNeutralManaInfoMessage(dice.dice_school, roll);
       } else if (roll > total_sides - dice.crit_sides) {
         // critical roll scored
         switch (dice.dice_school) {
           case 'life':
             this.healPlayer(2);
-            this.get('diceMessages').pushObject((schoolName + ' dice crit! You gained 2 health!'));
             break;
           case 'death':
             this.harmOpponent(2);
-            this.get('diceMessages').pushObject((schoolName + ' dice crit! Opponent lost 2 health!'));
             break;
           case 'phys':
             // Add two 1 strength creatures
             this.addCreatureAlly(1);
             this.addCreatureAlly(1);
-            this.get('diceMessages').pushObject((schoolName + ' dice crit! You gained 2 creatures of strength 1!'));
             break;
           case 'illusion':
             this.set('player_counterspell_tokens', this.get('player_counterspell_tokens') + 1);
-            this.get('diceMessages').pushObject((schoolName + ' dice crit! You gained a counterspell token!'));
             break;
           default:
         }
+        this.get('info').addCritInfoMessage(dice.dice_school);
       } else {
         // give school mana
-        this.addSchoolMana(dice.dice_school, roll - dice.neutral_sides);
-        this.get('diceMessages').pushObject((schoolName + ' dice added ' + (roll - dice.neutral_sides) + ' '+ schoolName +' mana'));
+        var amount = roll - dice.neutral_sides;
+        this.addSchoolMana(dice.dice_school, amount);
+        this.get('info').addSchoolManaInfoMessage(dice.dice_school, amount);
       }
     });
   },
@@ -292,7 +279,7 @@ export default Ember.Service.extend({
 
     if (defeatedCreatures > 0) {
       this.get('stats').trackCreaturesKilled(defeatedCreatures);
-      this.get('combatMessages').pushObject((defeatedCreatures + ' creatures perished in combat'));
+      this.get('info').addPerishedCreaturesInfoMessage(defeatedCreatures);
     }
     // Deal damage to player with least creatures from unblocked
     var damage = 0;
@@ -301,16 +288,12 @@ export default Ember.Service.extend({
     }
     if(playerHasMoreCreatures) {
       this.harmOpponent(damage);
-      if (damage > 0) {
-        this.get('combatMessages').pushObject(('Your creatures dealt '+ damage +' damage to your opponent'));
-      }
+      this.get('info').addFaceDamageInfoMessage(false, damage);
       this.set('player_creatures', largerCreatureList);
       this.set('opponent_creatures', smallerCreatureList);
     } else {
       this.harmPlayer(damage);
-      if (damage > 0) {
-        this.get('combatMessages').pushObject(('Your rival\'s creatures dealt '+ damage +' damage to you'));
-      }
+      this.get('info').addFaceDamageInfoMessage(true, damage);
       this.set('opponent_creatures', largerCreatureList);
       this.set('player_creatures', smallerCreatureList);
     }
@@ -322,9 +305,7 @@ export default Ember.Service.extend({
     this.get('player_creatures').removeObject(0);
     this.get('opponent_creatures').removeObject(0);
 
-    if (this.get('combatMessages').length === 0) {
-      this.get('combatMessages').pushObject('Nothing interesting happed...');
-    }
+    this.get('info').showCombatMessages();
   },
   endTurn() {
     // Clean out any unspent mana
@@ -344,7 +325,7 @@ export default Ember.Service.extend({
 
     // Trigger new turn
     this.get('stats').incrementTurn();
-    this.set('startingNewTurn', true);
+    this.get('info').showNewTurnStats();
   }
 
 });

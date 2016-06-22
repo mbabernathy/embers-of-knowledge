@@ -1,11 +1,11 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  game: Ember.inject.service('game'),
+  info: Ember.inject.service('info'),
   diceMessages: null,
   actions: {
     clearDiceInfo() {
-      this.get('game.diceMessages').clear();
+      this.get('info').clearDiceMessages();
     }
   }
 });

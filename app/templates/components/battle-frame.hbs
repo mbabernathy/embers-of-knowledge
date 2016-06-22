@@ -6,10 +6,10 @@
     {{/bs-modal}}
   {{/if}}
   {{#if showDiceInfoModal}}
-    {{diceroll-info-popover diceMessages=game.diceMessages}}
+    {{diceroll-info-popover diceMessages=info.diceMessages}}
   {{/if}}
   {{#if showCombatRecapModal}}
-    {{combat-info-popover combatMessages=game.combatMessages}}
+    {{combat-info-popover combatMessages=info.combatMessages}}
   {{/if}}
   {{#if showManaLeftWarning}}
     {{#bs-modal body=false footer=false closeAction="clearManaWarning" submitAction="doBattle" title="Are you sure?" backdrop=false}}

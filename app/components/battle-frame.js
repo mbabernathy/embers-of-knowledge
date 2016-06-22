@@ -3,30 +3,30 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   classNames: ['battleflexbox'],
+  info: Ember.inject.service('info'),
   game: Ember.inject.service('game'),
   player: Ember.inject.service('player'),
   chosenSpellSchool: 'neutral',
 
   doingBattle: Ember.computed.bool('player.isBattling'),
-  showNewTurn: Ember.computed.bool('game.startingNewTurn'),
-  showDiceInfoModal: Ember.computed.notEmpty('game.diceMessages'),
-  showCombatRecapModal: Ember.computed.notEmpty('game.combatMessages'),
-  showManaLeftWarning: Ember.computed.bool('game.manaRemainingWarning'),
+  showNewTurn: Ember.computed.bool('info.startingNewTurn'),
+  showDiceInfoModal: Ember.computed.notEmpty('info.diceMessages'),
+  showCombatRecapModal: Ember.computed.notEmpty('info.combatMessages'),
+  showManaLeftWarning: Ember.computed.bool('info.manaRemainingWarning'),
   actions: {
     rollDice() {
-      this.set('game.startingNewTurn', false);
+      this.get('info').hideNewTurnStats();
       this.get('game').rollAllDice();
     },
     setChosenSchool(chosenSchool) {
       this.set('chosenSpellSchool', chosenSchool);
     },
     doBattle() {
-      // TODO; can I call the action that does this from here?
-      this.set('game.manaRemainingWarning', false);
+      this.get('info').hideRemainingManaWarning();
       this.get('game').resolveCombat();
     },
     clearManaWarning() {
-      this.set('game.manaRemainingWarning', false);
+      this.get('info').hideRemainingManaWarning();
     }
   }
 });

@@ -1,0 +1,22 @@
+<div class="battleflexbox" style="border: 1px solid">
+  <div>
+    <div class="dice {{dice.dice_school}}">
+      {{prettify-school dice.dice_school}}
+    </div>
+  </div>
+  <div>
+    New side cost: {{newSideCost}}
+    <div>
+      Neutral sides: {{dice.neutral_sides}}
+      <button class="btn btn-default">Add Neutral Side</button>
+    </div>
+    <div>
+      {{prettify-school dice.dice_school}} sides: {{dice.school_sides}}
+      <button class="btn btn-default">Add {{prettify-school dice.dice_school}} Side</button>
+    </div>
+    <div>
+      Critical sides: {{dice.crit_sides}}
+      <button class="btn btn-default">Add Critical Side</button>
+    </div>
+  </div>
+</div>

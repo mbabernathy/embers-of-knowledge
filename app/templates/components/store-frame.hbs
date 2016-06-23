@@ -1,5 +1,8 @@
 {{#if doingShopping}}
   <h2>OMG A SHOP!</h2>
   <p>Your money: {{player.player_money}}</p>
+  {{#each player.player_dice as |dice|}}
+    {{store-dice dice=dice}}
+  {{/each}}
   <button class="btn btn-default" {{action "gotoBattle"}}>Done Shopping</button>
 {{/if}}

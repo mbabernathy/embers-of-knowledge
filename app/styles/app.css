@@ -57,6 +57,15 @@
   background: #3355ee;
 }
 
+.dice {
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}
+
 .player-health {
   border-radius: 50%;
 	width: 4em;

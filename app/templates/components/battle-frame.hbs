@@ -2,7 +2,7 @@
   {{#if showNewTurn}}
     {{#bs-modal closeAction="rollDice" title="Turn Starting" backdrop=false}}
       <p>Stats so far:</p>
-      {{battle-stats}}
+      {{battle-stats battleRecap=false}}
     {{/bs-modal}}
   {{/if}}
   {{#if showDiceInfoModal}}
@@ -17,6 +17,12 @@
         <p>You still have mana remaining to cast spells, and only neutral mana can be carried foward to the next turn</p>
       {{/bs-modal-body}}
       {{bs-modal-footer closeTitle="Go Back" submitTitle="Continue"}}
+    {{/bs-modal}}
+  {{/if}}
+  {{#if showEndBattleModal}}
+    {{#bs-modal closeAction="goToStore" title="Battle over" backdrop=true}}
+      <p>Your earnings:</p>
+      {{battle-stats battleRecap=true}}
     {{/bs-modal}}
   {{/if}}
   <div class="battleframe">

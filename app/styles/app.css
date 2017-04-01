@@ -25,6 +25,20 @@
   border: 1px solid;
 }
 
+.battlestat-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.battlestat-info {
+  flex: 3;
+  text-align: left;
+}
+
+.battlestat-money {
+  text-align: right;
+}
+
 .spell-picker-container {
   position: relative;
   width: 14em;

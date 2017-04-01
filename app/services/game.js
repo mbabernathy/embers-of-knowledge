@@ -163,16 +163,10 @@ export default Ember.Service.extend({
   harmOpponent(amount) {
     this.get('stats').trackDamage(amount);
     this.set('opponent_life', this.get('opponent_life') - amount);
-    if (this.get('opponent_life') <= 0) {
-      this.get('player').endBattlePhase();
-    }
   },
   harmPlayer(amount) {
     this.get('stats').trackDamage(amount);
     this.set('player_life', this.get('player_life') - amount);
-    if (this.get('player_life') <= 0) {
-      this.get('player').endBattlePhase();
-    }
   },
   addCreatureAlly(strength) {
     this.get('stats').trackCreatureSummoned();

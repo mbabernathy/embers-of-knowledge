@@ -1,14 +1,54 @@
 <ul style="list-style-type:none">
-  <li>Turn: {{stats.roundTurns}}</li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Turn: {{stats.roundTurns}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundTurns}} x $5 = {{multiply stats.roundTurns 5}}</div>
+    {{/if}}
+  </li>
   <li><br/></li>
-  <li>Spells Cast: {{stats.roundSpells}}</li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Spells Cast: {{stats.roundSpells}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundSpells}} x $1 = {{multiply stats.roundSpells 1}}</div>
+    {{/if}}
+  </li>
   <li><br/></li>
-  <li>Damage dealt: {{stats.roundDamage}}</li>
-  <li>Damage healed: {{stats.roundHealed}}</li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Damage dealt: {{stats.roundDamage}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundDamage}} x $2 = {{multiply stats.roundDamage 2}}</div>
+    {{/if}}
+  </li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Damage healed: {{stats.roundHealed}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundHealed}} x $2 = {{multiply stats.roundHealed 2}}</div>
+    {{/if}}
+  </li>
   <li><br/></li>
-  <li>Mana gained: {{stats.roundManaGained}}</li>
-  <li>Mana spent: {{stats.roundManaSpent}}</li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Mana gained: {{stats.roundManaGained}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundManaGained}} x $1 = {{multiply stats.roundManaGained 1}}</div>
+    {{/if}}
+  </li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Mana spent: {{stats.roundManaSpent}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundManaSpent}} x $1 = {{multiply stats.roundManaSpent 1}}</div>
+    {{/if}}
+  </li>
   <li><br/></li>
-  <li>Creatures summoned: {{stats.roundSummons}}</li>
-  <li>Creatures killed: {{stats.roundKills}}</li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Creatures summoned: {{stats.roundSummons}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundSummons}} x $2 = {{multiply stats.roundSummons 2}}</div>
+    {{/if}}
+  </li>
+  <li class="battlestat-row">
+    <div class="battlestat-info">Creatures killed: {{stats.roundKills}}</div>
+    {{#if battleRecap}}
+      <div class="battlestat-money">{{stats.roundKills}} x $2 = {{multiply stats.roundKills 2}}</div>
+    {{/if}}
+  </li>
 </ul>

@@ -2,53 +2,59 @@
   <li class="battlestat-row">
     <div class="battlestat-info">Turn: {{stats.roundTurns}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundTurns}} x $5 = {{multiply stats.roundTurns 5}}</div>
+      <div class="battlestat-money">{{stats.roundTurns}} &times; $5 = ${{stats.expectedTurnIncome}}</div>
     {{/if}}
   </li>
   <li><br/></li>
   <li class="battlestat-row">
     <div class="battlestat-info">Spells Cast: {{stats.roundSpells}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundSpells}} x $1 = {{multiply stats.roundSpells 1}}</div>
+      <div class="battlestat-money">{{stats.roundSpells}} &times; $1 = ${{stats.expectedSpellIncome}}</div>
     {{/if}}
   </li>
   <li><br/></li>
   <li class="battlestat-row">
     <div class="battlestat-info">Damage dealt: {{stats.roundDamage}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundDamage}} x $2 = {{multiply stats.roundDamage 2}}</div>
+      <div class="battlestat-money">{{stats.roundDamage}} &times; $2 = ${{stats.expectedDamageIncome}}</div>
     {{/if}}
   </li>
   <li class="battlestat-row">
     <div class="battlestat-info">Damage healed: {{stats.roundHealed}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundHealed}} x $2 = {{multiply stats.roundHealed 2}}</div>
+      <div class="battlestat-money">{{stats.roundHealed}} &times; $2 = ${{stats.expectedHealIncome}}</div>
     {{/if}}
   </li>
   <li><br/></li>
   <li class="battlestat-row">
     <div class="battlestat-info">Mana gained: {{stats.roundManaGained}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundManaGained}} x $1 = {{multiply stats.roundManaGained 1}}</div>
+      <div class="battlestat-money">{{stats.roundManaGained}} &times; $1 = ${{stats.expectedManaGainIncome}}</div>
     {{/if}}
   </li>
   <li class="battlestat-row">
     <div class="battlestat-info">Mana spent: {{stats.roundManaSpent}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundManaSpent}} x $1 = {{multiply stats.roundManaSpent 1}}</div>
+      <div class="battlestat-money">{{stats.roundManaSpent}} &times; $1 = ${{stats.expectedManaSpendIncome}}</div>
     {{/if}}
   </li>
   <li><br/></li>
   <li class="battlestat-row">
     <div class="battlestat-info">Creatures summoned: {{stats.roundSummons}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundSummons}} x $2 = {{multiply stats.roundSummons 2}}</div>
+      <div class="battlestat-money">{{stats.roundSummons}} &times; $2 = ${{stats.expectedSummonIncome}}</div>
     {{/if}}
   </li>
   <li class="battlestat-row">
     <div class="battlestat-info">Creatures killed: {{stats.roundKills}}</div>
     {{#if battleRecap}}
-      <div class="battlestat-money">{{stats.roundKills}} x $2 = {{multiply stats.roundKills 2}}</div>
+      <div class="battlestat-money">{{stats.roundKills}} &times; $2 = ${{stats.expectedKillIncome}}</div>
     {{/if}}
   </li>
+  {{#if battleRecap}}
+  <li class="battlestat-row">
+    <div class="battlestat-info"/>
+    <div class="battlestat-money"><strong>Total Match Income: ${{stats.expectedIncome}}</strong></div>
+  </li>
+  {{/if}}
 </ul>

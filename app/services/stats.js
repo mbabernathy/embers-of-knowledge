@@ -57,5 +57,38 @@ export default Ember.Service.extend({
     this.set('roundSpells', 0);
     this.set('roundManaGained', 0);
     this.set('roundManaSpent', 0);
-  }
+  },
+
+  expectedTurnIncome: Ember.computed('roundTurns', function() {
+    return this.get('roundTurns') * 5;
+  }),
+  expectedDamageIncome: Ember.computed('roundDamage', function() {
+    return this.get('roundDamage') * 2;
+  }),
+  expectedHealIncome: Ember.computed('roundHealed', function() {
+    return this.get('roundHealed') * 2;
+  }),
+  expectedSummonIncome: Ember.computed('roundSummons', function() {
+    return this.get('roundSummons') * 2;
+  }),
+  expectedKillIncome: Ember.computed('roundKills', function() {
+    return this.get('roundKills') * 2;
+  }),
+  expectedSpellIncome: Ember.computed('roundSpells', function() {
+    return this.get('roundSpells') * 1;
+  }),
+  expectedManaGainIncome: Ember.computed('roundManaGained', function() {
+    return this.get('roundManaGained') * 1;
+  }),
+  expectedManaSpendIncome: Ember.computed('roundManaSpent', function() {
+    return this.get('roundManaSpent') * 1;
+  }),
+  expectedIncome: Ember.computed('expectedTurnIncome', 'expectedDamageIncome', 'expectedHealIncome',
+                                'expectedSummonIncome', 'expectedKillIncome', 'expectedSpellIncome',
+                                'expectedManaGainIncome', 'expectedManaSpendIncome', function() {
+    return this.get('expectedTurnIncome') + this.get('expectedDamageIncome') +
+            this.get('expectedHealIncome') + this.get('expectedSummonIncome') +
+            this.get('expectedKillIncome') + this.get('expectedSpellIncome') +
+            this.get('expectedManaGainIncome') + this.get('expectedManaSpendIncome');
+  })
 });

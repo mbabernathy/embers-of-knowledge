@@ -4,33 +4,6 @@ export default Ember.Service.extend({
   info: Ember.inject.service('info'),
   stats: Ember.inject.service('stats'),
   player: Ember.inject.service('player'),
-  max_life: 5,
-  player_dice: [
-    {
-      dice_school : 'life',
-      neutral_sides : 1,
-      school_sides : 1,
-      crit_sides : 1
-    },
-    {
-      dice_school : 'phys',
-      neutral_sides : 1,
-      school_sides : 1,
-      crit_sides : 1
-    },
-    {
-      dice_school : 'illusion',
-      neutral_sides : 1,
-      school_sides : 1,
-      crit_sides : 1
-    },
-    {
-      dice_school : 'death',
-      neutral_sides : 1,
-      school_sides : 1,
-      crit_sides : 1
-    },
-  ],
 
   player_life: 5,
   player_mana: {
@@ -56,8 +29,8 @@ export default Ember.Service.extend({
   createNewBattle() {
     this.get('opponent_creatures').clear();
     this.get('player_creatures').clear();
-    this.set('player_life', this.get('max_life'));
-    this.set('opponent_life', this.get('max_life'));
+    this.set('player_life', this.get('player.max_life'));
+    this.set('opponent_life', this.get('player.max_life'));
 
     this.set('player_mana.neutral', 0);
     this.set('player_mana.life', 0);
@@ -193,7 +166,7 @@ export default Ember.Service.extend({
     }
   },
   rollAllDice() {
-    this.get('player_dice').forEach((dice) => {
+    this.get('player.player_dice').forEach((dice) => {
       var total_sides = dice.neutral_sides + dice.school_sides + dice.crit_sides;
       var roll = Math.ceil(Math.random() * total_sides);
       if (roll <= dice.neutral_sides) {
@@ -307,13 +280,13 @@ export default Ember.Service.extend({
     this.set('player_mana.phys', 0);
     this.set('player_mana.illusion', 0);
     this.set('player_mana.death', 0);
-    if (this.get('player_mana.neutral') > this.get('max_life')) {
-      this.set('player_mana.neutral', this.get('max_life'));
+    if (this.get('player_mana.neutral') > this.get('player.max_life')) {
+      this.set('player_mana.neutral', this.get('player.max_life'));
     }
 
     // Deal with overheal
-    if (this.get('player_life') > this.get('max_life')) {
-      var hpDiff = this.get('player_life') - this.get('max_life');
+    if (this.get('player_life') > this.get('player.max_life')) {
+      var hpDiff = this.get('player_life') - this.get('player.max_life');
       this.set('player_life', this.get('player_life') - Math.ceil(0.25 * hpDiff));
     }
 

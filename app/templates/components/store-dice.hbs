@@ -8,15 +8,15 @@
     New side cost: {{newSideCost}}
     <div>
       Neutral sides: {{dice.neutral_sides}}
-      <button class="btn btn-default">Add Neutral Side</button>
+      <button class="btn btn-default" {{action "buyNeutralSide"}} disabled={{cantAfford}}>Add Neutral Side</button>
     </div>
     <div>
       {{prettify-school dice.dice_school}} sides: {{dice.school_sides}}
-      <button class="btn btn-default">Add {{prettify-school dice.dice_school}} Side</button>
+      <button class="btn btn-default" {{action "buySchoolSide"}} disabled={{cantAfford}}>Add {{prettify-school dice.dice_school}} Side</button>
     </div>
     <div>
       Critical sides: {{dice.crit_sides}}
-      <button class="btn btn-default">Add Critical Side</button>
+      <button class="btn btn-default" {{action "buyCritSide"}} disabled={{cantAfford}}>Add Critical Side</button>
     </div>
   </div>
 </div>

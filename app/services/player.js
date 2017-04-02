@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Service.extend({
   game: Ember.inject.service('game'),
   stats: Ember.inject.service('stats'),
+  max_life: 5,
   player_money: 0,
   player_dice: [
     {
@@ -52,5 +53,9 @@ export default Ember.Service.extend({
   startNewBattle() {
     this.set('isBattling', true);
     this.get('game').createNewBattle();
+  },
+
+  spendMoney(amount) {
+    this.set('player_money', this.get('player_money') - amount);
   }
 });

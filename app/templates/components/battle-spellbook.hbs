@@ -1,9 +1,9 @@
-<strong>{{prettifySchool chosenSchool}}</strong> Spellbook
+<strong>{{prettify-school chosenSchool}}</strong> Spellbook
 {{#each spellList as |spell|}}
   {{battle-spell spell=spell}}
 {{/each}}
 {{#if noKnownSpells}}
   <div>
-    You do not know any {{prettifySchool chosenSchool}} spells...
+    You do not know any {{prettify-school chosenSchool}} spells...
   </div>
 {{/if}}

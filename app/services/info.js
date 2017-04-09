@@ -15,11 +15,11 @@ export default Ember.Service.extend({
   },
 
   addNeutralManaInfoMessage(school, amount) {
-    this.get('diceMessages').pushObject((prettifySchool([school]) + ' dice added ' + amount + ' Neutral mana'));
+    this.get('diceMessages').pushObject((prettifySchool(school) + ' dice added ' + amount + ' Neutral mana'));
   },
 
   addSchoolManaInfoMessage(school, amount) {
-    var schoolName = prettifySchool([school]);
+    var schoolName = prettifySchool(school);
     this.get('diceMessages').pushObject((schoolName + ' dice added ' + amount + ' '+ schoolName +' mana'));
   },
 

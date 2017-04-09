@@ -1,5 +1,5 @@
-{{#bs-modal closeAction="clearCombatInfo" title="Creature Combat Recap" backdrop=false}}
+{{#bs-modal-simple onHide=(action "clearCombatInfo") title="Creature Combat Recap" backdrop=false}}
   {{#each combatMessages as |message|}}
     <p>{{message}}</p>
   {{/each}}
-{{/bs-modal}}
+{{/bs-modal-simple}}

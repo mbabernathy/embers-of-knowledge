@@ -1,9 +1,9 @@
 {{#if doingBattle}}
   {{#if showNewTurn}}
-    {{#bs-modal closeAction="rollDice" title="Turn Starting" backdrop=false}}
+    {{#bs-modal-simple onHide=(action "rollDice") title="Turn Starting" backdrop=false}}
       <p>Stats so far:</p>
       {{battle-stats battleRecap=false}}
-    {{/bs-modal}}
+    {{/bs-modal-simple}}
   {{/if}}
   {{#if showDiceInfoModal}}
     {{diceroll-info-popover diceMessages=info.diceMessages}}
@@ -12,18 +12,15 @@
     {{combat-info-popover combatMessages=info.combatMessages}}
   {{/if}}
   {{#if showManaLeftWarning}}
-    {{#bs-modal body=false footer=false closeAction="clearManaWarning" submitAction="doBattle" title="Are you sure?" backdrop=false}}
-      {{#bs-modal-body}}
+    {{#bs-modal-simple closeTitle="Go Back" submitTitle="Continue" onHide=(action "clearManaWarning") onSubmit=(action "doBattle") title="Are you sure?" backdrop=false}}
         <p>You still have mana remaining to cast spells, and only neutral mana can be carried foward to the next turn</p>
-      {{/bs-modal-body}}
-      {{bs-modal-footer closeTitle="Go Back" submitTitle="Continue"}}
-    {{/bs-modal}}
+    {{/bs-modal-simple}}
   {{/if}}
   {{#if showEndBattleModal}}
-    {{#bs-modal closeAction="goToStore" title="Battle over" backdrop=true}}
+    {{#bs-modal-simple onHide=(action "goToStore") title="Battle over" backdrop=true}}
       <p>Your earnings:</p>
       {{battle-stats battleRecap=true}}
-    {{/bs-modal}}
+    {{/bs-modal-simple}}
   {{/if}}
   <div class="battleframe">
     <h3>This is the Battle Frame</h3>

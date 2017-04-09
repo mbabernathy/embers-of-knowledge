@@ -1,5 +1,5 @@
-{{#bs-modal closeAction="clearDiceInfo" title="Dice Roll Recap" backdrop=false}}
+{{#bs-modal-simple onHide=(action "clearDiceInfo") title="Dice Roll Recap" backdrop=false}}
   {{#each diceMessages as |message|}}
     <p>{{message}}</p>
   {{/each}}
-{{/bs-modal}}
+{{/bs-modal-simple}}

@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
-export function prettifySchool(params) {
-  switch (params[0]) {
+export function prettifySchool(rawSchool) {
+  switch (rawSchool) {
     case 'neutral':
       return 'Neutral';
     case 'life':
@@ -25,4 +25,8 @@ export function prettifySchool(params) {
   }
 }
 
-export default Ember.Helper.helper(prettifySchool);
+export default Ember.Helper.extend({
+  compute(params) {
+    return prettifySchool(params[0])
+  }
+});

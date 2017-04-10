@@ -8,7 +8,6 @@ export default Ember.Component.extend({
   player: Ember.inject.service('player'),
   chosenSpellSchool: 'neutral',
 
-  doingBattle: Ember.computed.bool('player.isBattling'),
   showNewTurn: Ember.computed.bool('info.startingNewTurn'),
   showDiceInfoModal: Ember.computed.notEmpty('info.diceMessages'),
   showCombatRecapModal: Ember.computed.notEmpty('info.combatMessages'),

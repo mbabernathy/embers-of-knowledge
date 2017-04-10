@@ -1,4 +1,6 @@
 <h2 id="title">Welcome to Embers of Knowledge game!</h2>
-
-{{battle-frame}}
-{{store-frame}}
+{{#if model.player.isBattling}}
+  {{battle-frame}}
+{{else}}
+  {{store-frame}}
+{{/if}}

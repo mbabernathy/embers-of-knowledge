@@ -1,17 +1,14 @@
-{{#if doingShopping}}
-
-  <div style="">
-    Your money: {{player.player_money}}
+<div style="">
+  Your money: {{player.player_money}}
+</div>
+<div class="battleflexbox">
+  <div class="battleframe">
+    {{#each player.player_dice as |dice|}}
+      {{store-dice dice=dice}}
+    {{/each}}
   </div>
-  <div class="battleflexbox">
-    <div class="battleframe">
-      {{#each player.player_dice as |dice|}}
-        {{store-dice dice=dice}}
-      {{/each}}
-    </div>
-    <div class="battlespellbook">
-      {{spell-school-picker chooseSpell=(action "setStoreSchool")}}
-    </div>
+  <div class="battlespellbook">
+    {{spell-school-picker chooseSpell=(action "setStoreSchool")}}
   </div>
-  <button class="btn btn-default" {{action "gotoBattle"}}>Done Shopping</button>
-{{/if}}
+</div>
+<button class="btn btn-default" {{action "gotoBattle"}}>Done Shopping</button>

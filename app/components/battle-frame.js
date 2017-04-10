@@ -6,6 +6,7 @@ export default Ember.Component.extend({
   info: Ember.inject.service('info'),
   game: Ember.inject.service('game'),
   player: Ember.inject.service('player'),
+  stats: Ember.inject.service('stats'),
   chosenSpellSchool: 'neutral',
 
   showNewTurn: Ember.computed.bool('info.startingNewTurn'),

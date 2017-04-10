@@ -32,6 +32,13 @@ export default Ember.Component.extend({
     },
     goToStore() {
       this.get('player').endBattlePhase();
+    },
+    clearDiceInfoMessages() {
+      this.get('info').clearDiceMessages();
+    },
+    clearCombatInfoMessages() {
+      this.get('info').clearCombatMessages();
+      this.get('game').endTurn();
     }
   }
 });

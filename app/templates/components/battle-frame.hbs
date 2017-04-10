@@ -5,10 +5,10 @@
   {{/bs-modal-simple}}
 {{/if}}
 {{#if showDiceInfoModal}}
-  {{diceroll-info-popover diceMessages=info.diceMessages}}
+  {{diceroll-info-popover diceMessages=info.diceMessages clearDiceInfo=(action "clearDiceInfoMessages")}}
 {{/if}}
 {{#if showCombatRecapModal}}
-  {{combat-info-popover combatMessages=info.combatMessages}}
+  {{combat-info-popover combatMessages=info.combatMessages clearCombatInfo=(action "clearCombatInfoMessages")}}
 {{/if}}
 {{#if showManaLeftWarning}}
   {{#bs-modal-simple closeTitle="Go Back" submitTitle="Continue" onHide=(action "clearManaWarning") onSubmit=(action "doBattle") title="Are you sure?" backdrop=false}}

@@ -1,6 +1,6 @@
 <strong>{{prettify-school chosenSchool}}</strong> Spellbook
 {{#each spellList as |spell|}}
-  {{battle-spell spell=spell}}
+  {{battle-spell spell=spell castSpell=(action castSpell)}}
 {{/each}}
 {{#if noKnownSpells}}
   <div>

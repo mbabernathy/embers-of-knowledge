@@ -5,10 +5,5 @@ export default Ember.Component.extend({
   spell: null,
   cantCast: Ember.computed('game.player_mana.{neutral,life,phys,illusion,death}', function() {
     return !this.get('game').hasEnoughMana(this.get('spell.cost'));
-  }),
-  actions: {
-    castSpell() {
-      this.get('game').castSpell(this.spell);
-    }
-  }
+  })
 });

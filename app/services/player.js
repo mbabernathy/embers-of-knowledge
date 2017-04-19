@@ -47,5 +47,16 @@ export default Ember.Service.extend({
 
   spendMoney(amount) {
     this.set('player_money', this.get('player_money') - amount);
+  },
+
+  costFunction(step) {
+    const costArray = [1, 2, 5];
+    let cost = Math.pow(10, (parseInt(step / 3))) * (costArray[step % 3]);
+    return cost;
+  },
+
+  costForDiceSide(dice) {
+    let totalSides = dice.neutral_sides + dice.school_sides + dice.crit_sides;
+    return this.costFunction(totalSides);
   }
 });

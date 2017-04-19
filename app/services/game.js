@@ -65,7 +65,7 @@ export default Ember.Service.extend({
     }
   },
 
-  hasEnoughMana(cost){
+  hasEnoughMana(cost) {
     if (cost.life && cost.life > this.get('player_mana.life')) {
       return false;
     }

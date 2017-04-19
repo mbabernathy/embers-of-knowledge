@@ -4,7 +4,7 @@
 <div class="battleflexbox">
   <div class="battleframe">
     {{#each player.player_dice as |dice|}}
-      {{store-dice dice=dice}}
+      {{store-dice dice=dice player=player}}
     {{/each}}
   </div>
   <div class="battlespellbook">

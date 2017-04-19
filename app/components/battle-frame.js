@@ -16,6 +16,12 @@ export default Ember.Component.extend({
   showEndBattleModal: Ember.computed('game.{player_life,opponent_life}', function() {
     return (this.get('game.player_life') <= 0 || this.get('game.opponent_life') <= 0);
   }),
+  playerHasNoMana: Ember.computed('game.player_mana.{life,phys,illusion,death}', function() {
+    return (this.get('game.player_mana.life') +
+        this.get('game.player_mana.phys') +
+        this.get('game.player_mana.illusion') +
+        this.get('game.player_mana.death')) === 0;
+  }),
   actions: {
     rollDice() {
       this.get('info').hideNewTurnStats();
@@ -23,6 +29,13 @@ export default Ember.Component.extend({
     },
     setChosenSchool(chosenSchool) {
       this.set('chosenSpellSchool', chosenSchool);
+    },
+    finishCastPhase() {
+      if (!this.get('playerHasNoMana')) {
+        this.get('info').showRemainingManaWarning();
+      } else {
+        this.get('game').resolveCombat();
+      }
     },
     doBattle() {
       this.get('info').hideRemainingManaWarning();

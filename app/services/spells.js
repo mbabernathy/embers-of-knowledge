@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Service.extend({
   life_spells: [{
+    id: '1-00',
     name: 'Minor Heal',
     cost: {
       life: 1
@@ -12,6 +13,7 @@ export default Ember.Service.extend({
   }],
   bard_spells: [],
   illusion_spells: [{
+    id: '3-00',
     name: 'Make love not war',
     cost: {
       illusion: 1
@@ -22,6 +24,7 @@ export default Ember.Service.extend({
   }],
   sorcery_spells: [],
   death_spells: [{
+    id: '5-00',
     name: 'Minor Hurt',
     cost: {
       death: 1
@@ -32,6 +35,7 @@ export default Ember.Service.extend({
   }],
   summon_spells: [],
   phys_spells: [{
+    id: '7-00',
     name: 'Create Mini-Golem',
     cost: {
       phys: 1
@@ -40,8 +44,19 @@ export default Ember.Service.extend({
       addCreature: 1
     }
   }],
-  druid_spells: [],
+  druid_spells: [{
+    id: '8-00',
+    name: 'Summon Bear',
+    cost: {
+      life: 1,
+      phys: 1
+    },
+    effects: {
+      addCreature: 2
+    }
+  }],
   neutral_spells: [{
+    id: '0-00',
     name: 'Create Decoy',
     cost: {
       neutral: 2

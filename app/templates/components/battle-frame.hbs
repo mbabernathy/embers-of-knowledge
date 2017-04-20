@@ -38,7 +38,7 @@
     {{battle-player-creatures creatures=game.player_creatures}}
   </div>
   <div class="battlefooter">
-    {{battle-player-info player="Your" health=game.player_life mana=game.player_mana playerInfo=true}}
+    {{battle-player-info player="Your" health=game.player_life mana=game.player_mana playerInfo=true finishCastPhase=(action "finishCastPhase")}}
   </div>
 </div>
 <div class="battlespellbook">

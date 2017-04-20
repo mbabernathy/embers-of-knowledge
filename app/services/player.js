@@ -31,6 +31,7 @@ export default Ember.Service.extend({
       crit_sides : 1
     },
   ],
+  knownSpells: ['0-00', '1-00', '3-00', '5-00', '7-00'],
   isBattling: true,
 
   endBattlePhase() {

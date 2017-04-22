@@ -6,30 +6,30 @@ export default Ember.Service.extend({
   max_life: 5,
   player_money: 0,
   player_dice: [
-    {
+    Ember.Object.create({
       dice_school : 'life',
       neutral_sides : 1,
       school_sides : 1,
       crit_sides : 1
-    },
-    {
+    }),
+    Ember.Object.create({
       dice_school : 'phys',
       neutral_sides : 1,
       school_sides : 1,
       crit_sides : 1
-    },
-    {
+    }),
+    Ember.Object.create({
       dice_school : 'illusion',
       neutral_sides : 1,
       school_sides : 1,
       crit_sides : 1
-    },
-    {
+    }),
+    Ember.Object.create({
       dice_school : 'death',
       neutral_sides : 1,
       school_sides : 1,
       crit_sides : 1
-    },
+    }),
   ],
   knownSpells: ['0-00', '1-00', '3-00', '5-00', '7-00'],
   isBattling: true,
@@ -59,5 +59,32 @@ export default Ember.Service.extend({
   costForDiceSide(dice) {
     let totalSides = dice.neutral_sides + dice.school_sides + dice.crit_sides;
     return this.costFunction(totalSides);
+  },
+
+  upgradeDiceNeutralSide(dice) {
+    let cost = this.costForDiceSide(dice);
+    if (this.get('player_money') < cost) {
+      return;
+    }
+    this.spendMoney(cost);
+    dice.set('neutral_sides', dice.get('neutral_sides') + 1);
+  },
+
+  upgradeDiceSchoolSide(dice) {
+    let cost = this.costForDiceSide(dice);
+    if (this.get('player_money') < cost) {
+      return;
+    }
+    this.spendMoney(cost);
+    dice.set('school_sides', dice.get('school_sides') + 1);
+  },
+
+  upgradeDiceCritSide(dice) {
+    let cost = this.costForDiceSide(dice);
+    if (this.get('player_money') < cost) {
+      return;
+    }
+    this.spendMoney(cost);
+    dice.set('crit_sides', dice.get('crit_sides') + 1);
   }
 });

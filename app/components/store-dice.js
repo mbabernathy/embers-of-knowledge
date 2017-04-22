@@ -12,25 +12,13 @@ export default Ember.Component.extend({
 
   actions: {
     buyNeutralSide() {
-      if (this.get('cantAfford')) {
-        return;
-      }
-      this.get('player').spendMoney(this.get('newSideCost'));
-      this.set('dice.neutral_sides', this.get('dice.neutral_sides') + 1);
+      this.get('player').upgradeDiceNeutralSide(this.get('dice'));
     },
     buySchoolSide() {
-      if (this.get('cantAfford')) {
-        return;
-      }
-      this.get('player').spendMoney(this.get('newSideCost'));
-      this.set('dice.school_sides', this.get('dice.school_sides') + 1);
+      this.get('player').upgradeDiceSchoolSide(this.get('dice'));
     },
     buyCritSide() {
-      if (this.get('cantAfford')) {
-        return;
-      }
-      this.get('player').spendMoney(this.get('newSideCost'));
-      this.set('dice.crit_sides', this.get('dice.crit_sides') + 1);
+      this.get('player').upgradeDiceCritSide(this.get('dice'));
     }
   }
 });

@@ -8,7 +8,7 @@ export default Ember.Component.extend({
   spellListAll: Ember.computed('chosenSchool', function() {
     return this.get('spells').getKnownSchoolSpells(this.get('chosenSchool'));
   }),
-  spellList: Ember.computed.filter('spellListAll', function(spell, index, array) {
+  spellList: Ember.computed.filter('spellListAll', function(spell) {
     return this.get('player').knownSpells.includes(spell.id);
   }),
   noKnownSpells: Ember.computed.empty('spellList')

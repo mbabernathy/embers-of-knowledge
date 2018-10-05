@@ -9,6 +9,7 @@
   </div>
   <div class="battlespellbook">
     {{spell-school-picker chooseSpell=(action "setStoreSchool")}}
+    {{store-spellbook chosenSchool=chosenStoreSchool buySpell=(action "buySpell")}}
   </div>
 </div>
 <button class="btn btn-default" {{action "gotoBattle"}}>Done Shopping</button>

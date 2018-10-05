@@ -9,6 +9,9 @@ export default Ember.Component.extend({
     },
     setStoreSchool(chosenSchool) {
       this.set('chosenStoreSchool', chosenSchool);
+    },
+    buySpell(spell) {
+      this.get('player').buySpell(spell);
     }
   }
 });

@@ -4,6 +4,7 @@ export default Ember.Service.extend({
   life_spells: [{
     id: '1-00',
     name: 'Minor Heal',
+    buyCost: 0,
     cost: {
       life: 1
     },
@@ -15,6 +16,7 @@ export default Ember.Service.extend({
   illusion_spells: [{
     id: '3-00',
     name: 'Make love not war',
+    buyCost: 0,
     cost: {
       illusion: 1
     },
@@ -26,6 +28,7 @@ export default Ember.Service.extend({
   death_spells: [{
     id: '5-00',
     name: 'Minor Hurt',
+    buyCost: 0,
     cost: {
       death: 1
     },
@@ -37,6 +40,7 @@ export default Ember.Service.extend({
   phys_spells: [{
     id: '7-00',
     name: 'Create Mini-Golem',
+    buyCost: 0,
     cost: {
       phys: 1
     },
@@ -47,6 +51,7 @@ export default Ember.Service.extend({
   druid_spells: [{
     id: '8-00',
     name: 'Summon Bear',
+    buyCost: 10,
     cost: {
       life: 1,
       phys: 1
@@ -58,6 +63,7 @@ export default Ember.Service.extend({
   neutral_spells: [{
     id: '0-00',
     name: 'Create Decoy',
+    buyCost: 0,
     cost: {
       neutral: 2
     },

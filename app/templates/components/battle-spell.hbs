@@ -18,4 +18,8 @@ Cost:
 {{/if}}
 </div>
 <br/>
-<button class="btn btn-default" {{action castSpell spell}} disabled={{cantCast}}>Cast</button>
+{{#if inStore}}
+  <button class="btn btn-default" {{action buySpell spell}} disabled={{cantAfford}}>Buy for {{spell.buyCost}}</button>
+{{else}}
+  <button class="btn btn-default" {{action castSpell spell}} disabled={{cantCast}}>Cast</button>
+{{/if}}

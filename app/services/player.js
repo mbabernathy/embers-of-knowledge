@@ -86,5 +86,19 @@ export default Ember.Service.extend({
     }
     this.spendMoney(cost);
     dice.set('crit_sides', dice.get('crit_sides') + 1);
+  },
+
+  buySpell(spell) {
+    // make sure not already known
+    if (this.get('knownSpells').includes(spell.id)) {
+      return;
+    }
+    // check sufficient money
+    if (this.get('player_money') < spell.buyCost) {
+      return;
+    }
+    // do the transaction
+    this.spendMoney(spell.buyCost);
+    this.get('knownSpells').pushObject(spell.id);
   }
 });

@@ -43,7 +43,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+    rootURL = '/embers-of-knowledge'
   }
 
   return ENV;

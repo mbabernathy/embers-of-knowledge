@@ -43,7 +43,8 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    rootURL = '/embers-of-knowledge'
+    ENV.rootURL = '/embers-of-knowledge';
+    ENV.locationType = 'hash';
   }
 
   return ENV;

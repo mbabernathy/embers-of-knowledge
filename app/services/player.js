@@ -69,6 +69,7 @@ export default Ember.Service.extend({
   },
 
   startNewBattle() {
+    this.savePlayer();
     this.set('isBattling', true);
     this.get('game').createNewBattle();
   },
@@ -86,6 +87,29 @@ export default Ember.Service.extend({
   costForDiceSide(dice) {
     let totalSides = dice.neutral_sides + dice.school_sides + dice.crit_sides;
     return this.costFunction(totalSides);
+  },
+
+  costForNewDice() {
+    return Math.pow(10, (this.get('player_dice').length - 2))
+  },
+
+  buyNewDice(desiredSchool) {
+    // input validation
+    if (!['life','phys','illusion','death'].includes(desiredSchool)) {
+      return;
+    }
+    // check bank account
+    let cost = this.costForNewDice();
+    if (this.get('player_money') < cost) {
+      return;
+    }
+    this.spendMoney(cost);
+    this.get('player_dice').pushObject(Ember.Object.create({
+      dice_school : desiredSchool,
+      neutral_sides : 1,
+      school_sides : 1,
+      crit_sides : 1
+    }));
   },
 
   upgradeDiceNeutralSide(dice) {

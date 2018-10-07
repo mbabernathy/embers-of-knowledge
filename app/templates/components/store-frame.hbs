@@ -3,6 +3,13 @@
 </div>
 <div class="battleflexbox">
   <div class="battleframe">
+    <div>
+      New dice cost: {{newDiceCost}}
+      <button class="btn btn-default" {{action "buyNewLifeDice"}} disabled={{cantAffordDice}}>Buy New Life Dice</button>
+      <button class="btn btn-default" {{action "buyNewPhysDice"}} disabled={{cantAffordDice}}>Buy New Physical Dice</button>
+      <button class="btn btn-default" {{action "buyNewIllusionDice"}} disabled={{cantAffordDice}}>Buy New Illusion Dice</button>
+      <button class="btn btn-default" {{action "buyNewDeathDice"}} disabled={{cantAffordDice}}>Buy New Death Dice</button>
+    </div>
     {{#each player.player_dice as |dice|}}
       {{store-dice dice=dice player=player}}
     {{/each}}

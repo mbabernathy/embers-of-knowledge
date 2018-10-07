@@ -12,7 +12,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "publish": "rm -rf dist/*; rm -rf docs/*; ember build -prod; cp -r dist/* docs/"
   },
   "devDependencies": {
     "bootstrap": "^4.1.3",

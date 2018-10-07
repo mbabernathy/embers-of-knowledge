@@ -226,7 +226,6 @@ export default Ember.Service.extend({
     }
     largerCreatureList.sort((a,b)=>{return b-a;});
     smallerCreatureList.sort((a,b)=>{return a-b;});
-    console.log('COMBAT: '+ largerCreatureList + " vs " + smallerCreatureList);
 
     var defeatedCreatures = 0;
     // Face off the creaters in index order; kill loser & ties

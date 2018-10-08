@@ -4,6 +4,7 @@ export default Ember.Service.extend({
   info: Ember.inject.service('info'),
   stats: Ember.inject.service('stats'),
   player: Ember.inject.service('player'),
+  opponent: Ember.inject.service('opponent'),
 
   player_life: 5,
   player_mana: {
@@ -38,6 +39,7 @@ export default Ember.Service.extend({
     this.set('player_mana.illusion', 0);
     this.set('player_mana.death', 0);
 
+    this.get('opponent').setupRivalForMatch();
     this.get('stats').resetCombatStats();
     this.get('info').resetInfoForBattle();
   },
@@ -110,28 +112,34 @@ export default Ember.Service.extend({
     if (this.get('opponent_counterspell_tokens') >= 1) {
       this.set('opponent_counterspell_tokens', this.get('opponent_counterspell_tokens') - 1);
       // TODO: Do something to inform player their spell was countered?
-      return;
+    } else {
+      // Cast spell effects
+      if (spell.effects.healPlayer) {
+        this.healPlayer(spell.effects.healPlayer);
+      }
+      if (spell.effects.harmOpponent) {
+        this.harmOpponent(spell.effects.harmOpponent);
+      }
+      // The undefined check is needed here since adding
+      // a creature of strength 0 is valid, but fails the normal if check
+      if (typeof spell.effects.addCreature !== 'undefined') {
+        this.addCreatureAlly(spell.effects.addCreature);
+      }
+      if (spell.effects.desert) {
+        this.creatureRivalDesert(spell.effects.desert);
+      }
     }
 
-    // Cast spell effects
-    if (spell.effects.healPlayer) {
-      this.healPlayer(spell.effects.healPlayer);
-    }
-    if (spell.effects.harmOpponent) {
-      this.harmOpponent(spell.effects.harmOpponent);
-    }
-    // The undefined check is needed here since adding
-    // a creature of strength 0 is valid, but fails the normal if check
-    if (typeof spell.effects.addCreature !== 'undefined') {
-      this.addCreatureAlly(spell.effects.addCreature);
-    }
-    if (spell.effects.desert) {
-      this.creatureDesert(spell.effects.desert);
-    }
+    // Let opponent cast if they want
+    this.get('opponent').castRivalSpell();
   },
   healPlayer(amount) {
     this.get('stats').trackHealing(amount);
     this.set('player_life', this.get('player_life') + amount);
+  },
+  healOpponent(amount) {
+    this.get('stats').trackHealing(amount);
+    this.set('opponent_life', this.get('opponent_life') + amount);
   },
   harmOpponent(amount) {
     this.get('stats').trackDamage(amount);
@@ -151,7 +159,7 @@ export default Ember.Service.extend({
     this.get('opponent_creatures').pushObject(strength);
     this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return b-a;}));
   },
-  creatureDesert(target) {
+  creatureRivalDesert(target) {
     if (target === 0) {
       return;
     }
@@ -162,7 +170,21 @@ export default Ember.Service.extend({
       this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return b-a;}));
     }
     else { // no creatures of that strength exist, try one lower
-      this.creatureDesert(target - 1);
+      this.creatureRivalDesert(target - 1);
+    }
+  },
+  creatureAllyDesert(target) {
+    if (target === 0) {
+      return;
+    }
+    var index = this.get('player_creatures').indexOf(target);
+    if (index !== -1) {
+      this.get('player_creatures').removeAt(index);
+      this.get('player_creatures').pushObject(0);
+      this.set('player_creatures', this.get('player_creatures').sort((a,b)=>{return b-a;}));
+    }
+    else { // no creatures of that strength exist, try one lower
+      this.creatureAllyDesert(target - 1);
     }
   },
   rollAllDice() {
@@ -200,23 +222,29 @@ export default Ember.Service.extend({
         this.get('info').addSchoolManaInfoMessage(dice.dice_school, amount);
       }
     });
+    this.get('opponent').rollAllRivalDice();
   },
   resolveCombat() {
     // TODO trigger precombat stuff
+    // let opponent drain their mana pool
+    this.get('opponent').castAllRivalSpell();
+
     // Convert all remaining counterspell tokens into strenght 0 creatures
     if (this.get('player_counterspell_tokens') > 0) {
       this.get('player_creatures').pushObjects(Array(this.get('player_counterspell_tokens')).fill(0));
+      this.set('player_counterspell_tokens', 0);
     }
     if (this.get('opponent_counterspell_tokens') > 0) {
       this.get('opponent_creatures').pushObjects(Array(this.get('opponent_counterspell_tokens')).fill(0));
+      this.set('opponent_counterspell_tokens', 0);
     }
 
     // First, find out who has more creatures;
-    var playerHasMoreCreatures = (this.get('player_creatures').length >= this.get('opponent_creatures').length);
+    let playerHasMoreCreatures = (this.get('player_creatures').length >= this.get('opponent_creatures').length);
 
     // Sort creatures such that larger arrray desc; smaller ascend
-    var largerCreatureList;
-    var smallerCreatureList;
+    let largerCreatureList;
+    let smallerCreatureList;
     if (playerHasMoreCreatures) {
       largerCreatureList = this.get('player_creatures');
       smallerCreatureList = this.get('opponent_creatures');
@@ -282,11 +310,16 @@ export default Ember.Service.extend({
     if (this.get('player_mana.neutral') > this.get('player.max_life')) {
       this.set('player_mana.neutral', this.get('player.max_life'));
     }
+    this.get('opponent').clearRivalMana();
 
     // Deal with overheal
     if (this.get('player_life') > this.get('player.max_life')) {
-      var hpDiff = this.get('player_life') - this.get('player.max_life');
-      this.set('player_life', this.get('player_life') - Math.ceil(0.25 * hpDiff));
+      let hpDiffPlayer = this.get('player_life') - this.get('player.max_life');
+      this.set('player_life', this.get('player_life') - Math.ceil(0.25 * hpDiffPlayer));
+    }
+    if (this.get('opponent_life') > this.get('player.max_life')) {
+      let hpDiffRival = this.get('opponent_life') - this.get('player.max_life');
+      this.set('opponent_life', this.get('opponent_life') - Math.ceil(0.25 * hpDiffRival));
     }
 
     // Trigger new turn

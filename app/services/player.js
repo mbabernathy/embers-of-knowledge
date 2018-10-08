@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Service.extend({
   game: Ember.inject.service('game'),
   stats: Ember.inject.service('stats'),
+  opponent: Ember.inject.service('opponent'),
   max_life: 0,
   player_money: 0,
   player_dice: [],
@@ -24,6 +25,7 @@ export default Ember.Service.extend({
     });
     this.set('player_dice', playerDice);
     this.set('isBattling', true);
+    this.get('opponent').setupRivalForMatch();
   },
 
   loadPlayer() {

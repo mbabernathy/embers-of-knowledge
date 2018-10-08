@@ -24,7 +24,7 @@
 <div class="battleframe">
   <h3>This is the Battle Frame</h3>
   <div>
-    {{battle-player-info player="Rival" health=game.opponent_life mana=game.opponent_mana}}
+    {{battle-player-info player="Rival" health=game.opponent_life mana=game.opponent.opponent_mana_actual}}
   </div>
   <div>
     {{battle-player-creatures creatures=game.opponent_creatures}}

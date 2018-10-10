@@ -1,7 +1,7 @@
 # embers-of-knowledge
 Game project used to learn Ember.js
 
-Play here: [https://https;//mbabernathy.github.io/embers-of-knowledge/](https://https;//mbabernathy.github.io/embers-of-knowledge/)
+Play here: [https://mbabernathy.github.io/embers-of-knowledge/](https://mbabernathy.github.io/embers-of-knowledge/)
 
 ## How to Play
 

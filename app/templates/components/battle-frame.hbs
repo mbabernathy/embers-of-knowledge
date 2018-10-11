@@ -11,12 +11,12 @@
   {{combat-info-popover combatMessages=info.combatMessages clearCombatInfo=(action "clearCombatInfoMessages")}}
 {{/if}}
 {{#if showManaLeftWarning}}
-  {{#bs-modal-simple closeTitle="Go Back" submitTitle="Continue" onHide=(action "clearManaWarning") onSubmit=(action "doBattle") title="Are you sure?" backdrop=false}}
+  {{#bs-modal-simple closeTitle="Go Back" submitTitle="Continue" onHide=(action "clearManaWarning") onSubmit=(action "doBattle") title="Are you sure?" backdropClose=false}}
       <p>You still have mana remaining to cast spells, and only neutral mana can be carried foward to the next turn</p>
   {{/bs-modal-simple}}
 {{/if}}
 {{#if showEndBattleModal}}
-  {{#bs-modal-simple onHide=(action "goToStore") title="Battle over" backdrop=true}}
+  {{#bs-modal-simple onHide=(action "goToStore") title="Battle over"}}
     <p>Your earnings:</p>
     {{battle-stats stats=stats battleRecap=true}}
   {{/bs-modal-simple}}
@@ -24,7 +24,7 @@
 <div class="battleframe">
   <h3>This is the Battle Frame</h3>
   <div>
-    {{battle-player-info player="Rival" health=game.opponent_life mana=game.opponent.opponent_mana_actual}}
+    {{battle-player-info player="Rival" health=game.opponent_life mana=game.opponent_mana}}
   </div>
   <div>
     {{battle-player-creatures creatures=game.opponent_creatures}}

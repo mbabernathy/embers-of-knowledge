@@ -1,5 +1,5 @@
 {{#if showNewTurn}}
-  {{#bs-modal-simple onHide=(action "rollDice") title="Turn Starting" backdrop=false}}
+  {{#bs-modal-simple onHide=(action "rollDice") title="Turn Starting" backdrop=false closeTitle="Roll Magic Dice"}}
     <p>Stats so far:</p>
     {{battle-stats stats=stats battleRecap=false}}
   {{/bs-modal-simple}}
@@ -16,7 +16,7 @@
   {{/bs-modal-simple}}
 {{/if}}
 {{#if showEndBattleModal}}
-  {{#bs-modal-simple onHide=(action "goToStore") title="Battle over"}}
+  {{#bs-modal-simple onHide=(action "goToStore") title="Battle over" closeTitle="Go to Store"}}
     <p>Your earnings:</p>
     {{battle-stats stats=stats battleRecap=true}}
   {{/bs-modal-simple}}

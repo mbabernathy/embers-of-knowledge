@@ -3,6 +3,10 @@
   align-items: center;
 }
 
+.btn {
+  border: 1px solid;
+}
+
 .battleflexbox {
   display: flex;
   flex-flow: row wrap;

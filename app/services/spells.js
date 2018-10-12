@@ -12,8 +12,33 @@ export default Ember.Service.extend({
     effects: {
       healPlayer: 1
     }
+  }, {
+    id: '1-01',
+    name: 'Aura of Protection',
+    description: 'Reduce damage dealt to you by 1 (counters effects of damage curses)',
+    buyCost: 50,
+    cost: {
+      life: 2,
+      neutral: 1
+    },
+    effects: {
+      protectPlayer: 1
+    }
   }],
-  bard_spells: [],
+  bard_spells: [{
+    id: '2-00',
+    name: 'Song and Dance',
+    description: 'All creatures will dance, skipping the creature combat phase this turn',
+    buyCost: 50,
+    cost: {
+      life: 1,
+      illusion: 1,
+      neutral: 1
+    },
+    effects: {
+      skipCombat: 1
+    }
+  }],
   illusion_spells: [{
     id: '3-00',
     name: 'Make love not war',
@@ -26,7 +51,22 @@ export default Ember.Service.extend({
       desert: 1
     }
   }],
-  sorcery_spells: [],
+  sorcery_spells: [{
+    id: '4-00',
+    name: 'Fire spray',
+    description: 'Destroys 2 creatures of strength 1 (or less)',
+    buyCost: 50,
+    cost: {
+      illusion: 1,
+      death: 1
+    },
+    effects: {
+      massDestroy: {
+        number: 2,
+        strength: 1
+      }
+    }
+  }],
   death_spells: [{
     id: '5-00',
     name: 'Minor Hurt',
@@ -38,8 +78,35 @@ export default Ember.Service.extend({
     effects: {
       harmOpponent: 1
     }
+  }, {
+    id: '5-01',
+    name: 'Curse of Harming',
+    description: 'Increase damage dealt to oppontent by 1 (counters effects of protection auras)',
+    buyCost: 50,
+    cost: {
+      death: 2,
+      neutral: 1
+    },
+    effects: {
+      curseRival: 1
+    }
   }],
-  summon_spells: [],
+  summon_spells: [{
+    id: '6-00',
+    name: 'Summon Imps',
+    description: 'Summon 2 creatures of strength 1',
+    buyCost: 50,
+    cost: {
+      phys: 1,
+      death: 1
+    },
+    effects: {
+      massSummon: {
+        number: 2,
+        strength: 1
+      }
+    }
+  }],
   phys_spells: [{
     id: '7-00',
     name: 'Create Mini-Golem',

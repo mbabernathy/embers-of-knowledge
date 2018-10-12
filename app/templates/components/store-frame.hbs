@@ -1,5 +1,6 @@
 <div style="">
   Your money: {{player.player_money}}
+  <button class="btn btn-primary" {{action "gotoBattle"}}>Done Shopping</button>
 </div>
 <div class="battleflexbox">
   <div class="battleframe">
@@ -19,4 +20,3 @@
     {{store-spellbook chosenSchool=chosenStoreSchool buySpell=(action "buySpell")}}
   </div>
 </div>
-<button class="btn btn-default" {{action "gotoBattle"}}>Done Shopping</button>

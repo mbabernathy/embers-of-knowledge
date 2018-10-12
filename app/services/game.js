@@ -16,6 +16,7 @@ export default Ember.Service.extend({
   },
   player_counterspell_tokens: 0,
   player_creatures: [],
+  player_protection_aura: 0,
   opponent_life: 5,
   opponent_mana: {
     neutral: '?',
@@ -26,6 +27,8 @@ export default Ember.Service.extend({
   },
   opponent_counterspell_tokens: 0,
   opponent_creatures: [],
+  opponent_protection_aura: 0,
+  skipping_combat: false,
 
   createNewBattle() {
     this.get('opponent_creatures').clear();
@@ -128,6 +131,25 @@ export default Ember.Service.extend({
       if (spell.effects.desert) {
         this.creatureRivalDesert(spell.effects.desert);
       }
+      if (spell.effects.protectPlayer) {
+        this.set('player_protection_aura', this.get('player_protection_aura') + spell.effects.protectPlayer);
+      }
+      if (spell.effects.curseRival) {
+        this.set('opponent_protection_aura', this.get('opponent_protection_aura') - spell.effects.curseRival);
+      }
+      if (spell.effects.skipCombat) {
+        this.set('skipping_combat', true);
+      }
+      if (spell.effects.massSummon) {
+        for (var i=0; i<spell.effects.massSummon.number; i++) {
+          this.addCreatureAlly(spell.effects.massSummon.strength);
+        }
+      }
+      if (spell.effects.massDestroy) {
+        for (var j=0; j<spell.effects.massDestroy.number; j++) {
+          this.destroyRivalCreature(spell.effects.massDestroy.strength);
+        }
+      }
     }
 
     // Let opponent cast if they want
@@ -142,12 +164,30 @@ export default Ember.Service.extend({
     this.set('opponent_life', this.get('opponent_life') + amount);
   },
   harmOpponent(amount) {
-    this.get('stats').trackDamage(amount);
-    this.set('opponent_life', this.get('opponent_life') - amount);
+    // Damage of nothing cannot be modified up
+    if (!amount) {
+      return 0;
+    }
+    // Deal with damage modifiers, cannot be negative
+    let actualDmg = Math.max(amount - this.get('opponent_protection_aura'), 0);
+
+    // For payout purpose, take damage before reduction, or after amplification
+    this.get('stats').trackDamage(Math.max(amount, actualDmg));
+    this.set('opponent_life', this.get('opponent_life') - actualDmg);
+    return amount;
   },
   harmPlayer(amount) {
-    this.get('stats').trackDamage(amount);
-    this.set('player_life', this.get('player_life') - amount);
+    // Damage of nothing cannot be modified up
+    if (!amount) {
+      return 0;
+    }
+    // Deal with damage modifiers, cannot be negative
+    let actualDmg = Math.max(amount - this.get('player_protection_aura'), 0);
+
+    // For payout purpose, take damage before reduction, or after amplification
+    this.get('stats').trackDamage(Math.max(amount, actualDmg));
+    this.set('player_life', this.get('player_life') - actualDmg);
+    return actualDmg;
   },
   addCreatureAlly(strength) {
     this.get('stats').trackCreatureSummoned();
@@ -185,6 +225,18 @@ export default Ember.Service.extend({
     }
     else { // no creatures of that strength exist, try one lower
       this.creatureAllyDesert(target - 1);
+    }
+  },
+  destroyRivalCreature(target) {
+    if (target === -1) {
+      return;
+    }
+    var index = this.get('opponent_creatures').indexOf(target);
+    if (index !== -1) {
+      this.get('opponent_creatures').removeAt(index);
+    } else {
+      // No valid targets, try one strength lower
+      this.destroyRivalCreature(target-1);
     }
   },
   rollAllDice() {
@@ -239,57 +291,63 @@ export default Ember.Service.extend({
       this.set('opponent_counterspell_tokens', 0);
     }
 
-    // First, find out who has more creatures;
-    let playerHasMoreCreatures = (this.get('player_creatures').length >= this.get('opponent_creatures').length);
+    if(!this.get('skipping_combat')) {
+      // First, find out who has more creatures;
+      let playerHasMoreCreatures = (this.get('player_creatures').length >= this.get('opponent_creatures').length);
 
-    // Sort creatures such that larger arrray desc; smaller ascend
-    let largerCreatureList;
-    let smallerCreatureList;
-    if (playerHasMoreCreatures) {
-      largerCreatureList = this.get('player_creatures');
-      smallerCreatureList = this.get('opponent_creatures');
-    } else {
-      largerCreatureList = this.get('opponent_creatures');
-      smallerCreatureList = this.get('player_creatures');
-    }
-    largerCreatureList.sort((a,b)=>{return b-a;});
-    smallerCreatureList.sort((a,b)=>{return a-b;});
-
-    var defeatedCreatures = 0;
-    // Face off the creaters in index order; kill loser & ties
-    for (var i=0; i<smallerCreatureList.length; i++) {
-      if (smallerCreatureList[i] > largerCreatureList[i]) {
-        largerCreatureList[i] = 0;
-        defeatedCreatures++;
-      } else if (smallerCreatureList[i] < largerCreatureList[i]) {
-        smallerCreatureList[i] = 0;
-        defeatedCreatures++;
+      // Sort creatures such that larger arrray desc; smaller ascend
+      let largerCreatureList;
+      let smallerCreatureList;
+      if (playerHasMoreCreatures) {
+        largerCreatureList = this.get('player_creatures');
+        smallerCreatureList = this.get('opponent_creatures');
       } else {
-        largerCreatureList[i] = 0;
-        smallerCreatureList[i] = 0;
-        defeatedCreatures += 2;
+        largerCreatureList = this.get('opponent_creatures');
+        smallerCreatureList = this.get('player_creatures');
       }
-    }
+      largerCreatureList.sort((a,b)=>{return b-a;});
+      smallerCreatureList.sort((a,b)=>{return a-b;});
 
-    if (defeatedCreatures > 0) {
-      this.get('stats').trackCreaturesKilled(defeatedCreatures);
-      this.get('info').addPerishedCreaturesInfoMessage(defeatedCreatures);
-    }
-    // Deal damage to player with least creatures from unblocked
-    var damage = 0;
-    for (var j=smallerCreatureList.length; j<largerCreatureList.length; j++) {
-      damage += largerCreatureList[j];
-    }
-    if(playerHasMoreCreatures) {
-      this.harmOpponent(damage);
-      this.get('info').addFaceDamageInfoMessage(false, damage);
-      this.set('player_creatures', largerCreatureList);
-      this.set('opponent_creatures', smallerCreatureList);
+      var defeatedCreatures = 0;
+      // Face off the creaters in index order; kill loser & ties
+      for (var i=0; i<smallerCreatureList.length; i++) {
+        if (smallerCreatureList[i] > largerCreatureList[i]) {
+          largerCreatureList[i] = 0;
+          defeatedCreatures++;
+        } else if (smallerCreatureList[i] < largerCreatureList[i]) {
+          smallerCreatureList[i] = 0;
+          defeatedCreatures++;
+        } else {
+          largerCreatureList[i] = 0;
+          smallerCreatureList[i] = 0;
+          defeatedCreatures += 2;
+        }
+      }
+
+      if (defeatedCreatures > 0) {
+        this.get('stats').trackCreaturesKilled(defeatedCreatures);
+        this.get('info').addPerishedCreaturesInfoMessage(defeatedCreatures);
+      }
+      // Deal damage to player with least creatures from unblocked
+      let unblockedCreatures = largerCreatureList.slice(smallerCreatureList.length);
+      let damageInfo = 0;
+      if(playerHasMoreCreatures) {
+        damageInfo = unblockedCreatures
+        .map(creature => this.harmOpponent(creature))
+        .reduce((acc, dmg) => acc + dmg, 0);
+        this.get('info').addFaceDamageInfoMessage(false, damageInfo);
+        this.set('player_creatures', largerCreatureList);
+        this.set('opponent_creatures', smallerCreatureList);
+      } else {
+        damageInfo = unblockedCreatures
+        .map(creature => this.harmPlayer(creature))
+        .reduce((acc, dmg) => acc + dmg, 0);
+        this.get('info').addFaceDamageInfoMessage(true, damageInfo);
+        this.set('opponent_creatures', largerCreatureList);
+        this.set('player_creatures', smallerCreatureList);
+      }
     } else {
-      this.harmPlayer(damage);
-      this.get('info').addFaceDamageInfoMessage(true, damage);
-      this.set('opponent_creatures', largerCreatureList);
-      this.set('player_creatures', smallerCreatureList);
+      this.get('info').addSkipCombatMessage();
     }
 
     // Remove dead creatures & sort
@@ -321,6 +379,11 @@ export default Ember.Service.extend({
       let hpDiffRival = this.get('opponent_life') - this.get('player.max_life');
       this.set('opponent_life', this.get('opponent_life') - Math.ceil(0.25 * hpDiffRival));
     }
+
+    // Clear out per turn effects
+    this.set('player_protection_aura', 0);
+    this.set('opponent_protection_aura', 0);
+    this.set('skipping_combat', false);
 
     // Trigger new turn
     this.get('stats').incrementTurn();

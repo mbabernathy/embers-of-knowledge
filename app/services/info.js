@@ -59,6 +59,10 @@ export default Ember.Service.extend({
     }
   },
 
+  addSkipCombatMessage() {
+    this.get('combatMessages').pushObject('All creatures were too busy partying to fight!')
+  },
+
   showCombatMessages() {
     if (this.get('combatMessages').length === 0) {
       this.get('combatMessages').pushObject('Nothing interesting happed...');

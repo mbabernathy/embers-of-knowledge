@@ -4,6 +4,7 @@ export default Ember.Service.extend({
   game: Ember.inject.service('game'),
   stats: Ember.inject.service('stats'),
   player: Ember.inject.service('player'),
+  info: Ember.inject.service('info'),
 
   opponent_mana_actual: {
     neutral: 0,
@@ -84,6 +85,7 @@ export default Ember.Service.extend({
         this.addRivalNeutralMana(roll);
       } else if (roll > total_sides - dice.crit_sides) {
         // critical roll scored
+        this.get('info').addOpponentDiceCritMessage(dice.dice_school);
         switch (dice.dice_school) {
           case 'life':
             this.get('game').healOpponent(2);
@@ -110,7 +112,8 @@ export default Ember.Service.extend({
   },
   checkCounterspell() {
     if (this.get('game.player_counterspell_tokens') > 0) {
-      this.set('game.player_counterspell_tokens', this.get('game.player_counterspell_tokens') -1)
+      this.set('game.player_counterspell_tokens', this.get('game.player_counterspell_tokens') -1);
+      this.get('info').addOpponentSpellCounteredMessage();
       return true;
     }
     return false;
@@ -122,6 +125,7 @@ export default Ember.Service.extend({
       this.get('stats').trackSpellCast({life:1});
       if (!this.checkCounterspell()) {
         this.get('game').healOpponent(1);
+        this.get('info').addOpponentSpellMessage('Minor Heal','they gained 1 health');
       }
       return;
     }
@@ -130,6 +134,7 @@ export default Ember.Service.extend({
       this.get('stats').trackSpellCast({death:1});
       if (!this.checkCounterspell()) {
         this.get('game').harmPlayer(1);
+        this.get('info').addOpponentSpellMessage('Minor Hurt','you lost 1 health! How rude!');
       }
       return;
     }
@@ -138,6 +143,7 @@ export default Ember.Service.extend({
       this.get('stats').trackSpellCast({phys:1});
       if (!this.checkCounterspell()) {
         this.get('game').addCreatureRival(1);
+        this.get('info').addOpponentSpellMessage('Create Mini-Golem','a 1 strength creature joined the opponent\'s side');
       }
       return;
     }
@@ -146,13 +152,17 @@ export default Ember.Service.extend({
       this.get('stats').trackSpellCast({illusion:1});
       if (!this.checkCounterspell()) {
         this.get('game').creatureAllyDesert(1);
+        this.get('info').addOpponentSpellMessage('Make love not war','one of your 1 strength creatures now refuses to fight! Lazy bum!');
       }
       return;
     }
     if (this.get('opponent_mana_actual.neutral') > 1) {
       this.set('opponent_mana_actual.neutral', this.get('opponent_mana_actual.neutral')-2);
-      this.get('game').addCreatureRival(0);
       this.get('stats').trackSpellCast({neutral:2});
+      if (!this.checkCounterspell()) {
+        this.get('game').addCreatureRival(0);
+        this.get('info').addOpponentSpellMessage('Create Decoy','a 0 strength decoy was created on the opponent\'s side');
+      }
       return;
     }
   },

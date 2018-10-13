@@ -5,6 +5,7 @@ export default Ember.Service.extend({
   startingNewTurn: true,
   diceMessages: [],
   combatMessages: [],
+  infoLogMessages: [],
   manaRemainingWarning: false,
 
   resetInfoForBattle() {
@@ -12,6 +13,7 @@ export default Ember.Service.extend({
     this.get('combatMessages').clear();
     this.set('startingNewTurn', true);
     this.set('manaRemainingWarning', false);
+    this.get('infoLogMessages').clear();
   },
 
   addNeutralManaInfoMessage(school, amount) {
@@ -45,8 +47,40 @@ export default Ember.Service.extend({
     this.get('diceMessages').clear();
   },
 
+  addOpponentDiceCritMessage(school) {
+    switch (school) {
+      case 'life':
+        this.get('infoLogMessages').pushObject('Opponent\'s life dice crit! They gained 2 health');
+        break;
+      case 'death':
+        this.get('infoLogMessages').pushObject('Opponent\'s death dice crit! You lost 2 health!');
+        break;
+      case 'phys':
+        this.get('infoLogMessages').pushObject('Opponent\'s physical dice crit! They gained 2 creatures');
+        break;
+      case 'illusion':
+        // Don't tell the player their spell can be countered!
+        break;
+      default:
+    }
+  },
+  addPlayerSpellCastMessage(spellName) {
+    this.get('infoLogMessages').pushObject('You successfully cast ' + spellName);
+  },
+  addPlayerSpellCounteredMessage(spellName) {
+    this.get('infoLogMessages').pushObject('Your '+ spellName +' cast was countered by your opponent!');
+  },
+  addOpponentSpellMessage(spellName, spellEffectString) {
+    this.get('infoLogMessages').pushObject('Your opponent cast ' + spellName + ', ' + spellEffectString);
+  },
+  addOpponentSpellCounteredMessage() {
+    this.get('infoLogMessages').pushObject('You countered your opponent\'s spell!');
+  },
   addPerishedCreaturesInfoMessage(numPerished) {
     this.get('combatMessages').pushObject((numPerished + ' creatures perished in combat'));
+  },
+  clearSpellcastInfoMessages() {
+    this.get('infoLogMessages').clear();
   },
 
   addFaceDamageInfoMessage(isYourFace, damage) {

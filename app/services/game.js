@@ -114,7 +114,7 @@ export default Ember.Service.extend({
     // Check for counterspell
     if (this.get('opponent_counterspell_tokens') >= 1) {
       this.set('opponent_counterspell_tokens', this.get('opponent_counterspell_tokens') - 1);
-      // TODO: Do something to inform player their spell was countered?
+      this.get('info').addPlayerSpellCounteredMessage(spell.name);
     } else {
       // Cast spell effects
       if (spell.effects.healPlayer) {
@@ -151,6 +151,7 @@ export default Ember.Service.extend({
         }
       }
     }
+    this.get('info').addPlayerSpellCastMessage(spell.name);
 
     // Let opponent cast if they want
     this.get('opponent').castRivalSpell();

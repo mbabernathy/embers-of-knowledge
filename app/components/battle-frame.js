@@ -52,6 +52,7 @@ export default Ember.Component.extend({
     },
     clearCombatInfoMessages() {
       this.get('info').clearCombatMessages();
+      this.get('info').clearSpellcastInfoMessages();
       this.get('game').endTurn();
     },
     castSpell(spell) {

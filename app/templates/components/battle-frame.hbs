@@ -40,6 +40,9 @@
   <div class="battlefooter">
     {{battle-player-info player="Your" health=game.player_life mana=game.player_mana playerInfo=true finishCastPhase=(action "finishCastPhase")}}
   </div>
+  <div>
+    {{battle-info-log infoMessages=info.infoLogMessages}}
+  </div>
 </div>
 <div class="battlespellbook">
   {{spell-school-picker chooseSpell=(action "setChosenSchool")}}

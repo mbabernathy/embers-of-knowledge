@@ -150,8 +150,10 @@ export default Ember.Service.extend({
           this.destroyRivalCreature(spell.effects.massDestroy.strength);
         }
       }
+
+      // Inform player spell was cast successfully
+      this.get('info').addPlayerSpellCastMessage(spell.name);
     }
-    this.get('info').addPlayerSpellCastMessage(spell.name);
 
     // Let opponent cast if they want
     this.get('opponent').castRivalSpell();

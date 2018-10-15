@@ -4,6 +4,7 @@ export default Ember.Service.extend({
   game: Ember.inject.service('game'),
   stats: Ember.inject.service('stats'),
   opponent: Ember.inject.service('opponent'),
+  info: Ember.inject.service('info'),
   max_life: 0,
   player_money: 0,
   player_dice: [],
@@ -48,6 +49,7 @@ export default Ember.Service.extend({
       });
       this.set('player_dice', playerDice);
       this.set('isBattling', false);
+      this.get('info').clearNewPlayerInfo();
     } catch (e) {
       this.resetDefaultPlayer();
     }

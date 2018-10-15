@@ -1,4 +1,9 @@
-{{#if showNewTurn}}
+{{#if showNewPlayerInfo}}
+  {{#bs-modal-simple onHide=(action "clearNewPlayerModal") title="Welcome To Embers of Knowledge!" closeTitle="Start Playing!" backdropClose=false}}
+    <p>Learn how to play <a href="https://github.com/mbabernathy/embers-of-knowledge" target="_blank">here</a> (github.com)</p>
+    <p>Ooor the TL;DR: Each turn, roll dice to get mana. Use mana to cast spells until you run out. After, creatures fight each other, with unblocked ones hitting other player.  Once a player is defeated, get paid. Take winnings to store to upgrade dice and buy new spells. Repeat.</p>
+  {{/bs-modal-simple}}
+{{else if showNewTurn}}
   {{#bs-modal-simple onHide=(action "rollDice") title="Turn Starting" backdrop=false closeTitle="Roll Magic Dice"}}
     <p>Stats so far:</p>
     {{battle-stats stats=stats battleRecap=false}}

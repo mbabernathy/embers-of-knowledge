@@ -9,6 +9,7 @@ export default Ember.Component.extend({
   stats: Ember.inject.service('stats'),
   chosenSpellSchool: 'neutral',
 
+  showNewPlayerInfo: Ember.computed.bool('info.newPlayerInfo'),
   showNewTurn: Ember.computed.bool('info.startingNewTurn'),
   showDiceInfoModal: Ember.computed.notEmpty('info.diceMessages'),
   showCombatRecapModal: Ember.computed.notEmpty('info.combatMessages'),
@@ -57,6 +58,9 @@ export default Ember.Component.extend({
     },
     castSpell(spell) {
       this.get('game').castSpell(spell);
+    },
+    clearNewPlayerModal() {
+      this.get('info').clearNewPlayerInfo();
     }
   }
 });

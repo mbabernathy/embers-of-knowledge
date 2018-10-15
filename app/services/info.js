@@ -7,7 +7,11 @@ export default Ember.Service.extend({
   combatMessages: [],
   infoLogMessages: [],
   manaRemainingWarning: false,
+  newPlayerInfo: true,
 
+  clearNewPlayerInfo() {
+    this.set('newPlayerInfo', false);
+  },
   resetInfoForBattle() {
     this.get('diceMessages').clear();
     this.get('combatMessages').clear();
@@ -99,7 +103,7 @@ export default Ember.Service.extend({
 
   showCombatMessages() {
     if (this.get('combatMessages').length === 0) {
-      this.get('combatMessages').pushObject('Nothing interesting happed...');
+      this.get('combatMessages').pushObject('Nothing interesting happened...');
     }
   },
 

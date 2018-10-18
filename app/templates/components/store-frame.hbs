@@ -15,6 +15,10 @@
       {{store-dice dice=dice player=player}}
     {{/each}}
   </div>
+  <div class="battleframe">
+    <button class="btn btn-default" {{action "buyLeaugeUpgrade"}} disabled={{cantAffordLeague}}>Upgrade Competition League for ({{leagueUpgrageCost}})</button>
+    <p>This has the effect of doubling your and your opponent's starting life, as well as how much neutral mana you can carry over.  This should extend the length of matches to compensate for the more powerful spells you've learned</p>
+  </div>
   <div class="battlespellbook">
     {{spell-school-picker chooseSpell=(action "setStoreSchool")}}
     {{store-spellbook chosenSchool=chosenStoreSchool buySpell=(action "buySpell")}}

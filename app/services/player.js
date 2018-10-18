@@ -94,7 +94,12 @@ export default Ember.Service.extend({
   },
 
   costForNewDice() {
-    return Math.pow(10, (this.get('player_dice').length - 2))
+    let costStep = (this.get('player_dice').length * 2)- 2;
+    return this.costFunction(costStep);
+  },
+
+  costForLeagueUpgrade() {
+    return Math.pow(10, Math.round(Math.log2(this.get('max_life')/5)) + 2);
   },
 
   buyNewDice(desiredSchool) {
@@ -155,5 +160,15 @@ export default Ember.Service.extend({
     // do the transaction
     this.spendMoney(spell.buyCost);
     this.get('knownSpells').pushObject(spell.id);
+  },
+
+  upgradeLeague() {
+    // Check money
+    let cost = this.costForLeagueUpgrade();
+    if (this.get('player_money') < cost) {
+      return;
+    }
+    this.spendMoney(cost);
+    this.set('max_life', this.get('max_life')*2);
   }
 });

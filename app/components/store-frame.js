@@ -3,11 +3,17 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   player: Ember.inject.service('player'),
   chosenStoreSchool: 'neutral',
-  newDiceCost: Ember.computed('player.player_money', 'player.player_dice.[]', function() {
+  newDiceCost: Ember.computed('player.player_dice.[]', function() {
     return this.get('player').costForNewDice();
   }),
   cantAffordDice: Ember.computed('player.player_money', 'newDiceCost', function() {
     return this.get('player.player_money') < this.get('newDiceCost');
+  }),
+  leagueUpgrageCost: Ember.computed('player.max_life', function() {
+    return this.get('player').costForLeagueUpgrade();
+  }),
+  cantAffordLeague: Ember.computed('player.player_money', 'leagueUpgrageCost', function() {
+    return this.get('player.player_money') < this.get('leagueUpgrageCost');
   }),
   actions: {
     gotoBattle() {
@@ -30,6 +36,9 @@ export default Ember.Component.extend({
     },
     buyNewDeathDice() {
       this.get('player').buyNewDice('death');
+    },
+    buyLeaugeUpgrade() {
+      this.get('player').upgradeLeague();
     }
   }
 });

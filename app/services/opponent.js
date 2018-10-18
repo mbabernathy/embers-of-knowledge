@@ -133,8 +133,8 @@ export default Ember.Service.extend({
       this.set('opponent_mana_actual.death', this.get('opponent_mana_actual.death')-1);
       this.get('stats').trackSpellCast({death:1});
       if (!this.checkCounterspell()) {
-        this.get('game').harmPlayer(1);
-        this.get('info').addOpponentSpellMessage('Minor Hurt','you lost 1 health! How rude!');
+        let actualDmg = this.get('game').harmPlayer(1);
+        this.get('info').addOpponentSpellMessage('Minor Hurt','you lost '+actualDmg+' health! How rude!');
       }
       return;
     }

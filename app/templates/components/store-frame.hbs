@@ -2,22 +2,26 @@
   Your money: {{player.player_money}}
   <button class="btn btn-primary" {{action "gotoBattle"}}>Done Shopping</button>
 </div>
-<div class="battleflexbox">
-  <div class="battleframe">
+<div class="storeflexbox">
+  <div class="storediceframe">
     <div>
       New dice cost: {{newDiceCost}}
-      <button class="btn btn-default {{unless cantAffordDice "life"}}" {{action "buyNewLifeDice"}} disabled={{cantAffordDice}}>Buy New Life Dice</button>
-      <button class="btn btn-default {{unless cantAffordDice "phys"}}" {{action "buyNewPhysDice"}} disabled={{cantAffordDice}}>Buy New Physical Dice</button>
-      <button class="btn btn-default {{unless cantAffordDice "illusion"}}" {{action "buyNewIllusionDice"}} disabled={{cantAffordDice}}>Buy New Illusion Dice</button>
-      <button class="btn btn-default {{unless cantAffordDice "death"}}" {{action "buyNewDeathDice"}} disabled={{cantAffordDice}}>Buy New Death Dice</button>
+      <div class="newdicebuy">
+        <button class="btn btn-default {{unless cantAffordDice "life"}}" {{action "buyNewLifeDice"}} disabled={{cantAffordDice}}>Buy New Life Dice</button>
+        <button class="btn btn-default {{unless cantAffordDice "phys"}}" {{action "buyNewPhysDice"}} disabled={{cantAffordDice}}>Buy New Physical Dice</button>
+        <button class="btn btn-default {{unless cantAffordDice "illusion"}}" {{action "buyNewIllusionDice"}} disabled={{cantAffordDice}}>Buy New Illusion Dice</button>
+        <button class="btn btn-default {{unless cantAffordDice "death"}}" {{action "buyNewDeathDice"}} disabled={{cantAffordDice}}>Buy New Death Dice</button>
+      </div>
     </div>
     {{#each player.player_dice as |dice|}}
       {{store-dice dice=dice player=player}}
     {{/each}}
   </div>
-  <div class="battleframe">
-    <button class="btn btn-default" {{action "buyLeaugeUpgrade"}} disabled={{cantAffordLeague}}>Upgrade Competition League for ({{leagueUpgrageCost}})</button>
-    <p>This has the effect of doubling your and your opponent's starting life, as well as how much neutral mana you can carry over.  This should extend the length of matches to compensate for the more powerful spells you've learned</p>
+  <div class="storemidframe">
+    <div style="margin: 0 2em;">
+      <button class="btn btn-default" {{action "buyLeaugeUpgrade"}} disabled={{cantAffordLeague}}>Upgrade Competition League for ({{leagueUpgrageCost}})</button>
+      <p>This has the effect of doubling your and your opponent's starting life, as well as how much neutral mana you can carry over.  This should extend the length of matches to compensate for the more powerful spells you've learned</p>
+    </div>
   </div>
   <div class="battlespellbook">
     {{spell-school-picker chooseSpell=(action "setStoreSchool")}}

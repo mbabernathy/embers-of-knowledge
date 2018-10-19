@@ -43,6 +43,59 @@
   text-align: right;
 }
 
+.storeflexbox {
+  display: flex;
+  flex-direction: row;
+}
+
+.storediceframe {
+  flex: 1;
+  border: 1px solid;
+}
+
+.storemidframe {
+  flex: 1;
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.storemidframe button {
+  width: 100%;
+}
+
+.newdicebuy {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.dicebox {
+  display: flex;
+  border: 1px solid;
+  align-items: center;
+  justify-content: center;
+}
+
+.dicesidelist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0 2em;
+}
+
+.dicesidelist div {
+  margin: 0.2em 0;
+}
+
+.dicesidebuy {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+}
+
 .spell-picker-container {
   position: relative;
   width: 14em;

@@ -1,22 +1,26 @@
-<div class="battleflexbox" style="border: 1px solid">
-  <div>
+<div class="dicebox">
+  <div class="dicedisplay">
     <div class="dice {{dice.dice_school}}">
       {{prettify-school dice.dice_school}}
     </div>
+    <div>
+      New side cost: {{newSideCost}}
+    </div>
   </div>
-  <div>
-    New side cost: {{newSideCost}}
+  <div class="dicesidelist">
     <div>
       Neutral sides: {{dice.neutral_sides}}
-      <button class="btn btn-default" {{action "buyNeutralSide"}} disabled={{cantAfford}}>Add Neutral Side</button>
     </div>
     <div>
       {{prettify-school dice.dice_school}} sides: {{dice.school_sides}}
-      <button class="btn btn-default" {{action "buySchoolSide"}} disabled={{cantAfford}}>Add {{prettify-school dice.dice_school}} Side</button>
     </div>
     <div>
       Critical sides: {{dice.crit_sides}}
-      <button class="btn btn-default" {{action "buyCritSide"}} disabled={{cantAfford}}>Add Critical Side</button>
     </div>
+  </div>
+  <div class="dicesidebuy">
+      <button class="btn btn-default" {{action "buyNeutralSide"}} disabled={{cantAfford}}>Add Neutral Side for {{newSideCost}}</button>
+      <button class="btn btn-default" {{action "buySchoolSide"}} disabled={{cantAfford}}>Add {{prettify-school dice.dice_school}} Side for {{newSideCost}}</button>
+      <button class="btn btn-default" {{action "buyCritSide"}} disabled={{cantAfford}}>Add Critical Side for {{newSideCost}}</button>
   </div>
 </div>

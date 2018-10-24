@@ -115,47 +115,56 @@ export default Ember.Service.extend({
     if (this.get('opponent_counterspell_tokens') >= 1) {
       this.set('opponent_counterspell_tokens', this.get('opponent_counterspell_tokens') - 1);
       this.get('info').addPlayerSpellCounteredMessage(spell.name);
-    } else {
-      // Cast spell effects
-      if (spell.effects.healPlayer) {
-        this.healPlayer(spell.effects.healPlayer);
-      }
-      if (spell.effects.harmOpponent) {
-        this.harmOpponent(spell.effects.harmOpponent);
-      }
-      // The undefined check is needed here since adding
-      // a creature of strength 0 is valid, but fails the normal if check
-      if (typeof spell.effects.addCreature !== 'undefined') {
-        this.addCreatureAlly(spell.effects.addCreature);
-      }
-      if (spell.effects.desert) {
-        this.creatureRivalDesert(spell.effects.desert);
-      }
-      if (spell.effects.protectPlayer) {
-        this.set('player_protection_aura', this.get('player_protection_aura') + spell.effects.protectPlayer);
-      }
-      if (spell.effects.curseRival) {
-        this.set('opponent_protection_aura', this.get('opponent_protection_aura') - spell.effects.curseRival);
-      }
-      if (spell.effects.skipCombat) {
-        this.set('skipping_combat', true);
-      }
-      if (spell.effects.massSummon) {
-        for (var i=0; i<spell.effects.massSummon.number; i++) {
-          this.addCreatureAlly(spell.effects.massSummon.strength);
-        }
-      }
-      if (spell.effects.massDestroy) {
-        for (var j=0; j<spell.effects.massDestroy.number; j++) {
-          this.destroyRivalCreature(spell.effects.massDestroy.strength);
-        }
-      }
-
-      // Inform player spell was cast successfully
-      this.get('info').addPlayerSpellCastMessage(spell.name);
+      this.finishPlayerCast();
+      return;
     }
 
-    // Let opponent cast if they want
+    // Cast spell effects
+    if (spell.effects.healPlayer) {
+      this.healPlayer(spell.effects.healPlayer);
+    }
+    if (spell.effects.harmOpponent) {
+      this.harmOpponent(spell.effects.harmOpponent);
+    }
+    // The undefined check is needed here since adding
+    // a creature of strength 0 is valid, but fails the normal if check
+    if (typeof spell.effects.addCreature !== 'undefined') {
+      this.addCreatureAlly(spell.effects.addCreature);
+    }
+    if (spell.effects.desert) {
+      this.creatureRivalDesert(spell.effects.desert);
+    }
+    if (spell.effects.protectPlayer) {
+      this.changePlayerProtection(spell.effects.protectPlayer);
+    }
+    if (spell.effects.curseRival) {
+      this.changeOpponentProtection(spell.effects.curseRival * -1);
+    }
+    if (spell.effects.skipCombat) {
+      this.set('skipping_combat', true);
+    }
+    if (spell.effects.massSummon) {
+      for (var i=0; i<spell.effects.massSummon.number; i++) {
+        this.addCreatureAlly(spell.effects.massSummon.strength);
+      }
+    }
+    if (spell.effects.massDestroy) {
+      for (var j=0; j<spell.effects.massDestroy.number; j++) {
+        this.destroyRivalCreature(spell.effects.massDestroy.strength);
+      }
+    }
+
+    // Inform player spell was cast successfully
+    this.get('info').addPlayerSpellCastMessage(spell.name);
+
+    // TODO needs better flow
+    this.finishPlayerCast();
+  },
+  finishPlayerCast() {
+    // Clean up any casting states
+    // TODO code here
+
+    // Then let opponent cast
     this.get('opponent').castRivalSpell();
   },
   healPlayer(amount) {
@@ -165,6 +174,12 @@ export default Ember.Service.extend({
   healOpponent(amount) {
     this.get('stats').trackHealing(amount);
     this.set('opponent_life', this.get('opponent_life') + amount);
+  },
+  changePlayerProtection(amount) {
+    this.set('player_protection_aura', this.get('player_protection_aura') + amount);
+  },
+  changeOpponentProtection(amount) {
+    this.set('opponent_protection_aura', this.get('opponent_protection_aura') + amount);
   },
   harmOpponent(amount) {
     // Damage of nothing cannot be modified up
@@ -237,6 +252,7 @@ export default Ember.Service.extend({
     var index = this.get('opponent_creatures').indexOf(target);
     if (index !== -1) {
       this.get('opponent_creatures').removeAt(index);
+      this.get('stats').trackCreaturesKilled(1);
     } else {
       // No valid targets, try one strength lower
       this.destroyRivalCreature(target-1);

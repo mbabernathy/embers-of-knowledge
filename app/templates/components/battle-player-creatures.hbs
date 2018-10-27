@@ -1,7 +1,13 @@
 {{#each creatures as |thing|}}
 <div style="margin:5px">
-  <div class="creature">
-    {{thing}}
-  </div>
+  {{#if isTargeted}}
+    <button class="btn creature target" {{action resolveTarget thing}}>
+      {{thing}}
+    </button>
+  {{else}}
+    <div class="creature">
+      {{thing}}
+    </div>
+  {{/if}}
 </div>
 {{/each}}

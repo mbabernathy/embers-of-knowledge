@@ -129,6 +129,10 @@
   color: white;
 }
 
+.target {
+  box-shadow: 0 0 15px 5px darkorange;
+}
+
 .dice {
   border-radius: 50%;
   width: 5em;

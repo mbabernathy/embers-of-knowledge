@@ -31,6 +31,9 @@ export default Ember.Component.extend({
     setChosenSchool(chosenSchool) {
       this.set('chosenSpellSchool', chosenSchool);
     },
+    resolveTargetSpell(target) {
+      //
+    },
     finishCastPhase() {
       if (!this.get('playerHasNoMana')) {
         this.get('info').showRemainingManaWarning();

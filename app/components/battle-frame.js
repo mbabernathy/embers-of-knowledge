@@ -23,6 +23,12 @@ export default Ember.Component.extend({
         this.get('game.player_mana.illusion') +
         this.get('game.player_mana.death')) === 0;
   }),
+  playerCreaturesTargeted: Ember.computed('game.targetedSpell', function() {
+    return (this.get('game.targetedSpell.target') === 'player');
+  }),
+  rivalCreaturesTargeted: Ember.computed('game.targetedSpell', function() {
+    return (this.get('game.targetedSpell.target') === 'opponent');
+  }),
   actions: {
     rollDice() {
       this.get('info').hideNewTurnStats();
@@ -32,7 +38,7 @@ export default Ember.Component.extend({
       this.set('chosenSpellSchool', chosenSchool);
     },
     resolveTargetSpell(target) {
-      //
+      this.get('game').resolveSpellTarget(target);
     },
     finishCastPhase() {
       if (!this.get('playerHasNoMana')) {

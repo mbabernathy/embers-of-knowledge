@@ -16,7 +16,7 @@ export default Ember.Service.extend({
     id: '1-01',
     name: 'Aura of Protection',
     description: 'Reduce damage dealt to you by 1 (counters effects of damage curses)',
-    buyCost: 50,
+    buyCost: 100,
     cost: {
       life: 2,
       neutral: 1
@@ -66,6 +66,19 @@ export default Ember.Service.extend({
         strength: 1
       }
     }
+  }, {
+    id: '4-01',
+    name: 'Ice spear',
+    description: 'Destroys a single creature of strength 2 (or less)',
+    buyCost: 100,
+    cost: {
+      illusion: 1,
+      death: 1,
+      neutral: 1
+    },
+    effects: {
+      destroyCreature: 2
+    }
   }],
   death_spells: [{
     id: '5-00',
@@ -82,13 +95,24 @@ export default Ember.Service.extend({
     id: '5-01',
     name: 'Curse of Harming',
     description: 'Increase damage dealt to oppontent by 1 (counters effects of protection auras)',
-    buyCost: 50,
+    buyCost: 100,
     cost: {
       death: 2,
       neutral: 1
     },
     effects: {
       curseRival: 1
+    }
+  }, {
+    id: '5-02',
+    name: 'Necrotic Decay',
+    description: 'Weaken target creature by 1',
+    buyCost: 100,
+    cost: {
+      death: 2
+    },
+    effects: {
+      decayTarget: 1
     }
   }],
   summon_spells: [{
@@ -130,6 +154,19 @@ export default Ember.Service.extend({
     },
     effects: {
       addCreature: 2
+    }
+  }, {
+    id: '8-01',
+    name: 'Druidic Growth',
+    description: 'Strengthen target creature by 1',
+    buyCost: 200,
+    cost: {
+      life: 2,
+      phys: 1,
+      neutral: 1
+    },
+    effects: {
+      buffTarget: 1
     }
   }],
   neutral_spells: [{

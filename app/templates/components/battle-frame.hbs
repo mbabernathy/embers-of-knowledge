@@ -32,7 +32,7 @@
     {{battle-player-info player="Rival" health=game.opponent_life mana=game.opponent_mana}}
   </div>
   <div>
-    {{battle-player-creatures creatures=game.opponent_creatures resolveTarget=(action "resolveTargetSpell")}}
+    {{battle-player-creatures creatures=game.opponent_creatures isTargeted=rivalCreaturesTargeted resolveTarget=(action "resolveTargetSpell")}}
   </div>
   <div>
     <p>Opponent's creatures</p>
@@ -40,7 +40,7 @@
     <p>Your creatures</p>
   </div>
   <div>
-    {{battle-player-creatures creatures=game.player_creatures resolveTarget=(action "resolveTargetSpell")}}
+    {{battle-player-creatures creatures=game.player_creatures isTargeted=playerCreaturesTargeted resolveTarget=(action "resolveTargetSpell")}}
   </div>
   <div class="battlefooter">
     {{battle-player-info player="Your" health=game.player_life mana=game.player_mana playerInfo=true finishCastPhase=(action "finishCastPhase")}}

@@ -30,6 +30,8 @@ export default Ember.Service.extend({
   opponent_protection_aura: 0,
   skipping_combat: false,
 
+  targetedSpell: {},
+
   createNewBattle() {
     this.get('opponent_creatures').clear();
     this.get('player_creatures').clear();
@@ -119,6 +121,22 @@ export default Ember.Service.extend({
       return;
     }
 
+    // Do targeted spells first
+    if (spell.effects.buffTarget) {
+      this.set('targetedSpell', Ember.Object.create({
+        spellEffect : this.buffAllyCreature,
+        parameter : spell.effects.buffTarget,
+        target: 'player'
+      }));
+    }
+    if (spell.effects.decayTarget) {
+      this.set('targetedSpell', Ember.Object.create({
+        spellEffect : this.weakenRivalCreature,
+        parameter : spell.effects.decayTarget,
+        target: 'opponent'
+      }));
+    }
+
     // Cast spell effects
     if (spell.effects.healPlayer) {
       this.healPlayer(spell.effects.healPlayer);
@@ -142,6 +160,9 @@ export default Ember.Service.extend({
     }
     if (spell.effects.skipCombat) {
       this.set('skipping_combat', true);
+    }
+    if (spell.effects.destroyCreature) {
+      this.destroyRivalCreature(2);
     }
     if (spell.effects.massSummon) {
       for (var i=0; i<spell.effects.massSummon.number; i++) {
@@ -257,6 +278,28 @@ export default Ember.Service.extend({
       // No valid targets, try one strength lower
       this.destroyRivalCreature(target-1);
     }
+  },
+  buffAllyCreature(amount, target) {
+    var index = this.get('player_creatures').indexOf(target);
+    if (index !== -1) {
+      this.get('player_creatures').removeAt(index);
+      this.get('player_creatures').pushObject(target + amount);
+      this.set('player_creatures', this.get('player_creatures').sort((a,b)=>{return b-a;}));
+    } // No else as this shouldn't happen
+
+  },
+  weakenRivalCreature(amount, target) {
+    var index = this.get('opponent_creatures').indexOf(target);
+    if (index !== -1) {
+      this.get('opponent_creatures').removeAt(index);
+      this.get('opponent_creatures').pushObject(target + amount);
+      this.set('opponent_creatures', this.get('opponent_creatures').sort((a,b)=>{return b-a;}));
+    } // No else as this shouldn't happen
+  },
+  resolveSpellTarget(target) {
+    let temp = this.get('targetedSpell');
+    temp.spellEffect(temp.parameter, target);
+    this.set('targetedSpell', {});
   },
   rollAllDice() {
     this.get('player.player_dice').forEach((dice) => {

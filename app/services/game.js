@@ -124,14 +124,14 @@ export default Ember.Service.extend({
     // Do targeted spells first
     if (spell.effects.buffTarget) {
       this.set('targetedSpell', Ember.Object.create({
-        spellEffect : this.buffAllyCreature,
+        spellEffect : this.buffAllyCreature.bind(this),
         parameter : spell.effects.buffTarget,
         target: 'player'
       }));
     }
     if (spell.effects.decayTarget) {
       this.set('targetedSpell', Ember.Object.create({
-        spellEffect : this.weakenRivalCreature,
+        spellEffect : this.weakenRivalCreature.bind(this),
         parameter : spell.effects.decayTarget,
         target: 'opponent'
       }));

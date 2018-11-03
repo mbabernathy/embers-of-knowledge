@@ -4,21 +4,33 @@
 <strong>{{spell.name}}</strong><br/>
 Cost:
 <div class="spell-cost-container">
+  <div class="spacer"/>
 {{#if spell.cost.life}}
-  <div class="life mana-icon"/>{{spell.cost.life}}
+  <div class="spell-cost">
+    <div class="life mana-icon"/>{{spell.cost.life}}
+  </div>
 {{/if}}
 {{#if spell.cost.death}}
-  <div class="death mana-icon"/>{{spell.cost.death}}
+  <div class="spell-cost">
+    <div class="death mana-icon"/>{{spell.cost.death}}
+  </div>
 {{/if}}
 {{#if spell.cost.phys}}
-  <div class="phys mana-icon"/>{{spell.cost.phys}}
+  <div class="spell-cost">
+    <div class="phys mana-icon"/>{{spell.cost.phys}}
+  </div>
 {{/if}}
 {{#if spell.cost.illusion}}
-  <div class="illusion mana-icon"/>{{spell.cost.illusion}}
+  <div class="spell-cost">
+    <div class="illusion mana-icon"/>{{spell.cost.illusion}}
+  </div>
 {{/if}}
 {{#if spell.cost.neutral}}
-  <div class="neutral mana-icon"/>{{spell.cost.neutral}}
+  <div class="spell-cost">
+    <div class="neutral mana-icon"/>{{spell.cost.neutral}}
+  </div>
 {{/if}}
+  <div class="spacer"/>
 </div>
 <br/>
 {{#if inStore}}

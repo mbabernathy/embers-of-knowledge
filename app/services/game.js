@@ -213,7 +213,7 @@ export default Ember.Service.extend({
     // For payout purpose, take damage before reduction, or after amplification
     this.get('stats').trackDamage(Math.max(amount, actualDmg));
     this.set('opponent_life', this.get('opponent_life') - actualDmg);
-    return amount;
+    return actualDmg;
   },
   harmPlayer(amount) {
     // Damage of nothing cannot be modified up
